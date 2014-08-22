@@ -1,0 +1,42 @@
+{
+  "name": "react-components",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Searchable repository of React-components",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:vaffel/react-components.git"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "repository",
+    "registry"
+  ],
+  "author": "Espen Hovlandsdal <espen@hovlandsdal.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vaffel/react-components/issues"
+  },
+  "homepage": "https://github.com/vaffel/react-components",
+  "dependencies": {
+    "hapi": "^6.5.1",
+    "lodash": "^2.4.1",
+    "react": "^0.11.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-less": "^1.3.5",
+    "gulp-livereload": "^2.1.1",
+    "gulp-sourcemaps": "^1.1.1",
+    "gulp-util": "^3.0.0",
+    "gulp-webpack": "^0.3.0",
+    "jsx-loader": "^0.11.0",
+    "webpack": "^1.3.3-beta2",
+    "webpack-dev-server": "^1.4.10"
+  }
+}
