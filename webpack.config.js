@@ -1,9 +1,11 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
     cache: true,
     entry: {
-        bundle: './app/root'
+        bundle: './app/root',
+        vendor: ['react/addons', 'lodash'],
     },
     output: {
         path: path.join(__dirname, 'public', 'dist'),
@@ -21,5 +23,7 @@ module.exports = {
             { test: /\.jsx$/, loader: 'jsx-loader?insertPragma=React.DOM' },
         ]
     },
-    plugins: []
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js')
+    ]
 };

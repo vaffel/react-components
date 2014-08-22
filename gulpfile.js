@@ -24,11 +24,18 @@ gulp.task('serve', function() {
 });
 
 gulp.task('less', function() {
+    var lessc = less({
+        paths: [ path.join(__dirname, 'public', 'less', 'includes') ]
+    });
+
+    lessc.on('error',function(e){
+        gutil.log(e);
+        lessc.end();
+    });
+
     gulp.src('./public/less/components.less')
         .pipe(sourcemaps.init())
-        .pipe(less({
-            paths: [ path.join(__dirname, 'public', 'less', 'includes') ]
-        }))
+        .pipe(lessc)
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('./public/css'));
 });

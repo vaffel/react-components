@@ -1,5 +1,7 @@
 'use strict';
 
+require('node-jsx').install();
+
 var Hapi    = require('hapi');
 var isDev   = process.env.NODE_ENV === 'development';
 var min     = isDev ? '' : '.min';
@@ -15,20 +17,31 @@ var params = {
     },
     'resources': {
         css: '/css/components.css',
-        js: '/dist/bundle' + min + '.js'
+        js: [
+            '/dist/vendor.bundle' + min + '.js',
+            '/dist/bundle' + min + '.js'
+        ]
     }
 };
 
-// Front page
+function handleRequest(request, reply) {
+    reply(render(
+        request,
+        params,
+        tpl('default')
+    ));
+}
+
 server.route({
     method: 'GET',
     path: '/',
-    handler: function(request, reply) {
-        reply(render(
-            params,
-            tpl('default')
-        ));
-    }
+    handler: handleRequest
+});
+
+server.route({
+    method: 'GET',
+    path: '/search/{query}',
+    handler: handleRequest
 });
 
 server.route({

@@ -26,6 +26,7 @@
   "dependencies": {
     "hapi": "^6.5.1",
     "lodash": "^2.4.1",
+    "node-jsx": "^0.11.0",
     "react": "^0.11.1"
   },
   "devDependencies": {

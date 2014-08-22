@@ -1,0 +1,36 @@
+@import '_variables';
+
+header {
+    background: @react-dark;
+    color: @react-light-text;
+    padding: @header-padding;
+    min-height: @header-logo-size;
+    font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    h1, h2, h3 {
+        color: @react-blue;
+    }
+
+    h1 {
+        font-size: @header-logo-size / 3;
+        font-weight: normal;
+        margin: 0.1em 0;
+        padding-top: 0.3em;
+    }
+
+    .react-logo {
+        width: @header-logo-size;
+        height: @header-logo-size;
+        float: left;
+        margin-right: @header-logo-size / 8;
+    }
+
+    .container:before, .container:after {
+        content: ' ';
+        display: table;
+    }
+
+    .container:after {
+        clear: both;
+    }
+}

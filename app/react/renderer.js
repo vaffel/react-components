@@ -2,11 +2,27 @@
 
 var _ = require('lodash');
 var fs = require('fs');
+var App = require('app/root');
+var React = require('react/addons');
 var isDev = process.env.NODE_ENV === 'development';
 var templates = {};
 
-module.exports = function(params, template) {
-    if (!templates[template]) {
+module.exports = function(request, params, template) {
+    var isCrawler = false; // @todo Probably want to render SEO-markup
+    var app = new App({ path: request.url.path });
+    var body = '';
+
+    if (isCrawler) {
+        body = React.renderComponentToStaticMarkup(app);
+    } else {
+        body = React.renderComponentToString(app);
+    }
+
+    // Set content of the page
+    params.page.body = body;
+
+    // In dev-mode, re-read the template each time (to allow changes)
+    if (isDev || !templates[template]) {
         templates[template] = _.template(
             fs.readFileSync(template, { encoding: 'utf8' })
         );
