@@ -5,6 +5,7 @@ var React = require('react');
 var Container = require('app/components/container');
 var ReactLogo = require('app/components/react-logo');
 var SearchInput = require('app/components/search-input');
+var Loader = require('app/components/loader');
 
 var FrontPage = React.createClass({
     displayName: 'FrontPage',
@@ -18,13 +19,13 @@ var FrontPage = React.createClass({
                         <ReactLogo />
                         <h1>React Components</h1>
 
-                        <SearchInput />
+                        <SearchInput query="" />
                     </Container>
                 </header>
 
                 <main>
                     <Container>
-                        Content!
+                        <Loader />
                     </Container>
                 </main>
             </div>

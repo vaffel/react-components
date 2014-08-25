@@ -8,13 +8,15 @@ module.exports = React.createClass({
 
     propTypes: {
         autoFocus: React.PropTypes.bool,
-        placeholder: React.PropTypes.string
+        placeholder: React.PropTypes.string,
+        query: React.PropTypes.string
     },
 
     getDefaultProps: function() {
         return {
             autoFocus: true,
-            placeholder: 'Component name, keyword or similar'
+            placeholder: 'Component name, keyword or similar',
+            query: ''
         };
     },
 
@@ -29,6 +31,7 @@ module.exports = React.createClass({
             <input
                 type="search"
                 className="search"
+                defaultValue={this.props.query}
                 placeholder={this.props.placeholder}
                 autoFocus={this.props.autoFocus}
             />

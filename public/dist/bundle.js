@@ -1,4 +1,4 @@
-webpackJsonp([1],{
+webpackJsonp([0],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
@@ -6,9 +6,9 @@ webpackJsonp([1],{
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var _ = __webpack_require__(1);
-	var React = __webpack_require__(3);
-	var router = __webpack_require__(163);
+	var _ = __webpack_require__(2);
+	var React = __webpack_require__(1);
+	var router = __webpack_require__(3);
 	var isBrowser = typeof window !== 'undefined';
 	
 	var App = React.createClass({
@@ -52,13 +52,13 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 163:
+/***/ 3:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var queryParser = /(?:^|&)([^&=]*)=?([^&]*)/g;
-	var map = __webpack_require__(164);
+	var map = __webpack_require__(6);
 	
 	module.exports = function router(url) {
 	    var parts = url.split('?'),
@@ -109,12 +109,12 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 164:
+/***/ 6:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Front = __webpack_require__(165);
+	var Front = __webpack_require__(60);
 	
 	module.exports = {
 	    '/': Front,
@@ -123,16 +123,17 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 165:
+/***/ 60:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(166);
-	var Container = __webpack_require__(167);
-	var ReactLogo = __webpack_require__(168);
-	var SearchInput = __webpack_require__(169);
+	var React = __webpack_require__(124);
+	var Container = __webpack_require__(125);
+	var ReactLogo = __webpack_require__(126);
+	var SearchInput = __webpack_require__(127);
+	var Loader = __webpack_require__(128);
 	
 	var FrontPage = React.createClass({
 	    displayName: 'FrontPage',
@@ -146,13 +147,13 @@ webpackJsonp([1],{
 	                        ReactLogo(null), 
 	                        React.DOM.h1(null, "React Components"), 
 	
-	                        SearchInput(null)
+	                        SearchInput({query: ""})
 	                    )
 	                ), 
 	
 	                React.DOM.main(null, 
 	                    Container(null, 
-	                        "Content!"
+	                        Loader(null)
 	                    )
 	                )
 	            )
@@ -164,21 +165,21 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 166:
+/***/ 124:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(7);
+	module.exports = __webpack_require__(8);
 
 
 /***/ },
 
-/***/ 167:
+/***/ 125:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(166);
+	var React = __webpack_require__(124);
 	
 	module.exports = React.createClass({
 	    displayName: 'Container',
@@ -193,13 +194,13 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 168:
+/***/ 126:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(1);
-	var React = __webpack_require__(166);
+	var _ = __webpack_require__(2);
+	var React = __webpack_require__(124);
 	
 	module.exports = React.createClass({
 	    displayName: 'ReactLogo',
@@ -217,26 +218,28 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 169:
+/***/ 127:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(166);
+	var React = __webpack_require__(124);
 	
 	module.exports = React.createClass({
 	    displayName: 'SearchInput',
 	
 	    propTypes: {
 	        autoFocus: React.PropTypes.bool,
-	        placeholder: React.PropTypes.string
+	        placeholder: React.PropTypes.string,
+	        query: React.PropTypes.string
 	    },
 	
 	    getDefaultProps: function() {
 	        return {
 	            autoFocus: true,
-	            placeholder: 'Component name, keyword or similar'
+	            placeholder: 'Component name, keyword or similar',
+	            query: ''
 	        };
 	    },
 	
@@ -251,8 +254,36 @@ webpackJsonp([1],{
 	            React.DOM.input({
 	                type: "search", 
 	                className: "search", 
+	                defaultValue: this.props.query, 
 	                placeholder: this.props.placeholder, 
 	                autoFocus: this.props.autoFocus}
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 128:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(124);
+	
+	module.exports = React.createClass({
+	    displayName: 'Loader',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.div({className: "loader"}, 
+	                React.DOM.div({className: "dot"}), 
+	                React.DOM.div({className: "dot"}), 
+	                React.DOM.div({className: "dot"}), 
+	                React.DOM.div({className: "dot"}), 
+	                React.DOM.div({className: "dot"})
 	            )
 	        );
 	    }
