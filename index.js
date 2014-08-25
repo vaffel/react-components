@@ -1,7 +1,8 @@
 'use strict';
 
-require('node-jsx').install();
+require('node-jsx').install({ extension: '.jsx' });
 
+var config  = require('app/config');
 var Hapi    = require('hapi');
 var isDev   = process.env.NODE_ENV === 'development';
 var min     = isDev ? '' : '.min';
@@ -24,6 +25,20 @@ var params = {
     }
 };
 
+var controllers = {
+    components: require('app/controllers/components')
+};
+
+var stores = {
+    components: require('app/stores/components-store')
+};
+
+for (var key in stores) {
+    if (stores[key].init) {
+        stores[key].init();
+    }
+}
+
 function handleRequest(request, reply) {
     reply(render(
         request,
@@ -42,6 +57,24 @@ server.route({
     method: 'GET',
     path: '/search/{query}',
     handler: handleRequest
+});
+
+server.route({
+    method: 'GET',
+    path: '/api/components',
+    config: {
+        handler: controllers.components.componentsList,
+        cache: { expiresIn: config['poll-interval'], privacy: 'public' }
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/api/components/{component}',
+    config: {
+        handler: controllers.components.componentInfo,
+        cache: { expiresIn: config['poll-interval'], privacy: 'public' }
+    }
 });
 
 server.route({

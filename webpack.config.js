@@ -19,8 +19,7 @@ module.exports = {
             { test: /\.css$/,    loader: 'style-loader!css-loader' },
 
             // required for react jsx
-            { test: /\.js$/,  loader: 'jsx-loader' },
-            { test: /\.jsx$/, loader: 'jsx-loader?insertPragma=React.DOM' },
+            { test: /\.jsx?$/,  loader: 'jsx-loader' }
         ]
     },
     plugins: [

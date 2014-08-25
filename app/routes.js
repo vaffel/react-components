@@ -1,6 +1,6 @@
 'use strict';
 
-var Front = require('app/pages/front');
+var Front = require('app/pages/front.jsx');
 
 module.exports = {
     '/': Front,

@@ -1,4 +1,4 @@
-webpackJsonp([0],{
+webpackJsonp([1],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
@@ -6,9 +6,9 @@ webpackJsonp([0],{
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var _ = __webpack_require__(2);
-	var React = __webpack_require__(1);
-	var router = __webpack_require__(3);
+	var _ = __webpack_require__(1);
+	var React = __webpack_require__(3);
+	var router = __webpack_require__(163);
 	var isBrowser = typeof window !== 'undefined';
 	
 	var App = React.createClass({
@@ -52,13 +52,13 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 3:
+/***/ 163:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var queryParser = /(?:^|&)([^&=]*)=?([^&]*)/g;
-	var map = __webpack_require__(6);
+	var map = __webpack_require__(164);
 	
 	module.exports = function router(url) {
 	    var parts = url.split('?'),
@@ -109,12 +109,12 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 6:
+/***/ 164:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Front = __webpack_require__(60);
+	var Front = __webpack_require__(165);
 	
 	module.exports = {
 	    '/': Front,
@@ -123,17 +123,18 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 60:
+/***/ 165:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(124);
-	var Container = __webpack_require__(125);
-	var ReactLogo = __webpack_require__(126);
-	var SearchInput = __webpack_require__(127);
-	var Loader = __webpack_require__(128);
+	var React = __webpack_require__(166);
+	var Container = __webpack_require__(167);
+	var ReactLogo = __webpack_require__(168);
+	var SearchInput = __webpack_require__(169);
+	var Loader = __webpack_require__(170);
+	var Footer = __webpack_require__(171);
 	
 	var FrontPage = React.createClass({
 	    displayName: 'FrontPage',
@@ -152,10 +153,36 @@ webpackJsonp([0],{
 	                ), 
 	
 	                React.DOM.main(null, 
-	                    Container(null, 
-	                        Loader(null)
+	                    Container({className: "front"}, 
+	                        React.DOM.h1(null, "Searchable database of ", React.DOM.a({href: "http://facebook.github.io/react/"}, "React"), " components"), 
+	                        React.DOM.hr(null), 
+	
+	                        React.DOM.h2(null, "How it works"), 
+	                        React.DOM.p(null, 
+	                            "Every module registered on ", React.DOM.a({href: "https://www.npmjs.org/"}, "NPM"), " using the keyword ", React.DOM.a({href: "https://www.npmjs.org/browse/keyword/react-component", className: "emphasize"}, "react-component"), " will show up in the list." + ' ' +
+	                            "It really is that simple."
+	                        ), 
+	
+	                        React.DOM.h2(null, "How do I add my React component to the list?"), 
+	                        React.DOM.ol(null, 
+	                            React.DOM.li(null, "Ensure your ", React.DOM.em({className: "emphasize"}, "package.json"), " file contains an array of keywords which includes ", React.DOM.em({className: "emphasize"}, "react-component"), "."), 
+	                            React.DOM.li(null, "Publish your component to NPM (info on how to do that here)."), 
+	                            React.DOM.li(null, "Wait for it to show up! Shouldn't take longer than 10-15 minutes.")
+	                        ), 
+	
+	                        React.DOM.h2(null, "Who made this? Can I contribute?"), 
+	                        React.DOM.p(null, 
+	                            "Developed and currently hosted by ", React.DOM.a({href: "http://vaffel.ninja/"}, "VaffelNinja"), ", but it's an open-source, MIT-licensed solution." 
+	                        ), 
+	                        React.DOM.p(null, 
+	                            "Contributions are ", React.DOM.a({href: "https://github.com/vaffel/react-components"}, "very welcome"), "!" + ' ' +
+	                            "Please make sure you read the ", React.DOM.a({href: "https://github.com/vaffel/react-components/blob/master/CONTRIBUTING.md"}, "contribution guidelines"), "."
+	                        )
+	
 	                    )
-	                )
+	                ), 
+	
+	                Footer(null)
 	            )
 	        );
 	    }
@@ -165,28 +192,28 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 124:
+/***/ 166:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(8);
+	module.exports = __webpack_require__(7);
 
 
 /***/ },
 
-/***/ 125:
+/***/ 167:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(124);
+	var React = __webpack_require__(166);
 	
 	module.exports = React.createClass({
 	    displayName: 'Container',
 	
 	    /* jshint trailing:false, quotmark:false, newcap:false */
 	    render: function() {
-	        return (
+	        return this.transferPropsTo(
 	            React.DOM.div({className: "container"}, this.props.children)
 	        );
 	    }
@@ -194,13 +221,13 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 126:
+/***/ 168:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _ = __webpack_require__(2);
-	var React = __webpack_require__(124);
+	var _ = __webpack_require__(1);
+	var React = __webpack_require__(166);
 	
 	module.exports = React.createClass({
 	    displayName: 'ReactLogo',
@@ -218,13 +245,13 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 127:
+/***/ 169:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(124);
+	var React = __webpack_require__(166);
 	
 	module.exports = React.createClass({
 	    displayName: 'SearchInput',
@@ -264,13 +291,13 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 128:
+/***/ 170:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(124);
+	var React = __webpack_require__(166);
 	
 	module.exports = React.createClass({
 	    displayName: 'Loader',
@@ -284,6 +311,29 @@ webpackJsonp([0],{
 	                React.DOM.div({className: "dot"}), 
 	                React.DOM.div({className: "dot"}), 
 	                React.DOM.div({className: "dot"})
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 171:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(166);
+	
+	module.exports = React.createClass({
+	    displayName: 'Footer',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.footer(null, 
+	                "Made by ", React.DOM.a({href: "http://vaffel.ninja/"}, "VaffelNinja AS"), ". ", React.DOM.a({href: "https://github.com/vaffel/react-components"}, "Open-source"), "." 
 	            )
 	        );
 	    }

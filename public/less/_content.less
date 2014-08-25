@@ -1,6 +1,27 @@
 @import '_variables';
 
 main {
+    h1 {
+        text-align: center;
+    }
+
+    h2, h3 {
+        font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: normal;
+    }
+
+    hr {
+        height: 0;
+        border-top: 1px solid #bbb;
+        border-bottom: 1px solid #eee;
+        margin: 0 auto;
+    }
+
+    .emphasize {
+        font-weight: bold;
+        font-style: italic;
+    }
+
     .container {
         padding: @content-padding;
         margin-top: @content-margin;

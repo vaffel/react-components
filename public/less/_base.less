@@ -11,7 +11,16 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+a {
+    color: @react-maroon;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 .container {
-    max-width: 900px;
+    max-width: @page-max-width;
     margin: 0 auto;
 }

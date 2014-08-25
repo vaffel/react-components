@@ -8,7 +8,7 @@ module.exports = React.createClass({
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     render: function() {
-        return (
+        return this.transferPropsTo(
             <div className="container">{this.props.children}</div>
         );
     }
