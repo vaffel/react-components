@@ -2,6 +2,7 @@
 
 require('node-jsx').install({ extension: '.jsx' });
 
+var _       = require('lodash');
 var config  = require('app/config');
 var Hapi    = require('hapi');
 var isDev   = process.env.NODE_ENV === 'development';
@@ -39,10 +40,24 @@ for (var key in stores) {
     }
 }
 
+function getPageTitle(query) {
+    if (!query) {
+        return params.page.title;
+    }
+
+    return params.page.title + ' - ' + query;
+}
+
 function handleRequest(request, reply) {
+    var reqParams = _.merge({}, params, {
+        page: {
+            title: getPageTitle(request.params.query)
+        }
+    });
+
     reply(render(
         request,
-        params,
+        reqParams,
         tpl('default')
     ));
 }

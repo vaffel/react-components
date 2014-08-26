@@ -1,9 +1,20 @@
 'use strict';
 
 var queryParser = /(?:^|&)([^&=]*)=?([^&]*)/g;
-var map = require('app/routes');
+var util = require('util');
+var EventEmitter  = require('events').EventEmitter;
 
-module.exports = function router(url) {
+function Router() {
+    EventEmitter.call(this);
+}
+
+util.inherits(Router, EventEmitter);
+
+Router.prototype.setRoutes = function(map) {
+    this.map = map;
+};
+
+Router.prototype.match = function(url) {
     var parts = url.split('?'),
         qs    = parts[1] || '',
         path  = parts[0],
@@ -16,14 +27,14 @@ module.exports = function router(url) {
         }
     });
 
-    for (pattern in map) {
+    for (pattern in this.map) {
         params = match(pattern, path);
 
         if (params) {
             return {
                 route: params,
                 query: query,
-                page : map[pattern]
+                page : this.map[pattern]
             };
         }
     }
@@ -31,9 +42,15 @@ module.exports = function router(url) {
     return null;
 };
 
+Router.prototype.locationChanged = function() {
+    this.emit('location-change');
+};
+
+module.exports = new Router();
+
 function match(pattern, url) {
     var vars = pattern.match(/(:[a-zA-Z0-9]+)/g),
-        re = new RegExp('^' + pattern.replace(/(:[a-zA-Z0-9]+)/g, '([a-zA-Z0-9]+)') + '$'),
+        re = new RegExp('^' + pattern.replace(/(:[a-zA-Z0-9]+)/g, '(.*?)') + '$'),
         matches = url.match(re),
         params = {},
         varname;
@@ -44,7 +61,7 @@ function match(pattern, url) {
 
     for (var i = 1; i < matches.length; i++) {
         varname = vars[i - 1].substring(1);
-        params[varname] = matches[i];
+        params[varname] = decodeURIComponent(matches[i]);
     }
 
     return params;

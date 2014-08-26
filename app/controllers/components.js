@@ -6,7 +6,13 @@ var ComponentsStore = require('app/stores/components-store');
 module.exports = {
   
     componentsList: function(request, reply) {
-        reply(_.values(ComponentsStore.getComponentSummaries()));
+        var summaries = ComponentsStore.getComponentSummaries();
+        var response = {
+            keys: _.keys(summaries[0] || {}),
+            items: _.map(summaries, _.values)
+        };
+
+        reply(response);
     },
 
     componentInfo: function(request, reply) {

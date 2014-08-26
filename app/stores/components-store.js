@@ -4,7 +4,7 @@ var config = require('app/config');
 var npmApi = require('app/npm-api');
 
 var components = {},
-    componentSummaries = {};
+    componentSummaries = [];
 
 var ComponentStore = {
     init: function() {
@@ -43,16 +43,20 @@ var ComponentStore = {
     },
 
     addComponent: function(component) {
+        var distTags = component['dist-tags'] || {},
+            latest   = component.versions[distTags.latest] || {},
+            author   = (latest._npmUser || component.author).name;
+
         delete component.versions;
         components[component.name] = component;
         
-        componentSummaries[component.name] = {
+        componentSummaries.push({
             name: component.name,
             description: component.description,
-            author: (component.author || {}).name,
+            author: author,
             modified: component.time.modified,
             keywords: component.keywords.filter(isUncommonKeyword)
-        };
+        });
     },
 
     getComponent: function(name) {

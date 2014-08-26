@@ -1,8 +1,9 @@
 'use strict';
 
-var Front = require('app/pages/front.jsx');
+var Front  = require('app/pages/front.jsx');
+var Search = require('app/pages/search.jsx');
 
 module.exports = {
     '/': Front,
-    '/search/:query': Front
+    '/search/:query': Search
 };
