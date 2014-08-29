@@ -17,7 +17,7 @@ module.exports = function(request, params, template) {
     } else {
         body = React.renderComponentToString(app);
     }
-
+    
     // Set content of the page
     params.page.body = body;
 

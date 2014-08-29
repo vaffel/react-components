@@ -2,25 +2,22 @@
 'use strict';
 
 var React = require('react');
+var ComponentLink = require('app/components/component-link.jsx');
 
 module.exports = React.createClass({
     displayName: 'SearchResultItem',
-
-    getUrl: function() {
-        return '/component/' + encodeURIComponent(this.props.name);
-    },
 
     /* jshint quotmark:false, newcap:false */
     render: function() {
         return (
             <tr>
                 <td>
-                    <a className="component-name" href={this.getUrl()}>{this.props.name}</a>
-                    <p className="description">{this.props.description}</p>
+                    <ComponentLink component={this.props.component} />
+                    <p className="description">{this.props.component.description}</p>
                 </td>
-                <td>{this.props.author}</td>
-                <td>{this.props.stars || 0}</td>
-                <td>{this.props.modified.fromNow()}</td>
+                <td>{this.props.component.author}</td>
+                <td>{this.props.component.stars || 0}</td>
+                <td>{this.props.component.modified.fromNow()}</td>
             </tr>
         );
     }

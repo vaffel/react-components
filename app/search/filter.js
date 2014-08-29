@@ -1,41 +1,47 @@
 'use strict';
-
+var _ = require('lodash');
 var lunr = require('lunr');
+var ComponentStore = require('app/stores/components-store');
+var index = getNewIndex();
 
-function SearchFilter(components) {
-    this.components = components || [];
-    this.index = null;
-}
-
-SearchFilter.prototype.setComponents = function(components) {
-    this.index = lunr(function() {
+function getNewIndex() {
+    return lunr(function() {
         this.field('name', { boost: 10 });
         this.field('keywords', { boost: 5 });
         this.field('description');
     });
+}
 
-    this.components = components;
-    components.map(this.indexComponent.bind(this));
-};
+var SearchFilter = {
+    listen: function() {
+        ComponentStore.listen(this.onComponentsChanged);
+    },
 
-SearchFilter.prototype.indexComponent = function(mod, id) {
-    this.index.add({
-        id: id,
-        name: mod.name,
-        keywords: mod.keywords.join(' '),
-        description: mod.description
-    });
-};
+    onComponentsChanged: function() {
+        var components = ComponentStore.getSummaries();
 
-SearchFilter.prototype.filter = function(query) {
-    if (!this.index) {
-        throw new Error('No components indexed! Can\'t filter yet.');
+        // Reset search index
+        index = getNewIndex();
+
+        // Add components
+        components.map(this.indexComponent);
+    },
+
+    indexComponent: function(mod, id) {
+        index.add({
+            id: id,
+            name: mod.name,
+            keywords: mod.keywords.join(' '),
+            description: mod.description
+        });
+    },
+
+    filter: function(query) {
+        var summaries = ComponentStore.getSummaries();
+        return index.search(query).map(function(match) {
+            return _.merge(summaries[match.ref], match);
+        });
     }
-
-    var components = this.components;
-    return this.index.search(query).map(function(match) {
-        return components[match.ref];
-    });
 };
 
-module.exports = SearchFilter;
+module.exports = _.bindAll(SearchFilter);

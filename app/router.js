@@ -1,54 +1,50 @@
 'use strict';
 
 var queryParser = /(?:^|&)([^&=]*)=?([^&]*)/g;
-var util = require('util');
-var EventEmitter  = require('events').EventEmitter;
+var RoutingActions = require('app/actions/routing');
+var map = {};
 
-function Router() {
-    EventEmitter.call(this);
-}
+var Router = {
+    setRoutes: function(routeMap) {
+        map = routeMap;
+    },
 
-util.inherits(Router, EventEmitter);
+    match: function(url) {
+        var parts = url.split('?'),
+            qs    = parts[1] || '',
+            path  = parts[0],
+            query = {},
+            pattern, params;
 
-Router.prototype.setRoutes = function(map) {
-    this.map = map;
-};
+        qs.replace(queryParser, function ($0, $1, $2) {
+            if ($1) {
+                query[$1] = $2;
+            }
+        });
 
-Router.prototype.match = function(url) {
-    var parts = url.split('?'),
-        qs    = parts[1] || '',
-        path  = parts[0],
-        query = {},
-        pattern, params;
+        for (pattern in map) {
+            params = matchPattern(pattern, path);
 
-    qs.replace(queryParser, function ($0, $1, $2) {
-        if ($1) {
-            query[$1] = $2;
+            if (params) {
+                return {
+                    route: params,
+                    query: query,
+                    page : map[pattern]
+                };
+            }
         }
-    });
 
-    for (pattern in this.map) {
-        params = match(pattern, path);
+        return null;
+    },
 
-        if (params) {
-            return {
-                route: params,
-                query: query,
-                page : this.map[pattern]
-            };
-        }
+    locationChanged: function() {
+        RoutingActions.locationChange();
     }
-
-    return null;
 };
 
-Router.prototype.locationChanged = function() {
-    this.emit('location-change');
-};
+module.exports = Router;
 
-module.exports = new Router();
-
-function match(pattern, url) {
+function matchPattern(pattern, url) {
     var vars = pattern.match(/(:[a-zA-Z0-9]+)/g),
         re = new RegExp('^' + pattern.replace(/(:[a-zA-Z0-9]+)/g, '(.*?)') + '$'),
         matches = url.match(re),

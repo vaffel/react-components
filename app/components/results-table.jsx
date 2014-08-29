@@ -8,8 +8,15 @@ var NoResult = require('app/components/no-result.jsx');
 module.exports = React.createClass({
     displayName: 'SearchResultsTable',
 
+    getComponentItem: function(item) {
+        return new SearchResult({
+            key: item.name,
+            component: item
+        });
+    },
+
     getSearchResults: function() {
-        return this.props.results.map(SearchResult);
+        return this.props.results.map(this.getComponentItem);
     },
 
     /* jshint quotmark:false, newcap:false */

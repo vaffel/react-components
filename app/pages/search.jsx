@@ -3,41 +3,28 @@
 
 var React  = require('react');
 var Layout = require('app/components/layout.jsx');
-var Loader = require('app/components/loader.jsx');
 var ResultsTable = require('app/components/results-table.jsx');
-var searchIndex = require('app/search/index');
+var ComponentStore = require('app/stores/components-store');
+var SearchFilter = require('app/search/filter');
 
 module.exports = React.createClass({
     displayName: 'SearchPage',
 
-    getInitialState: function() {
-        return {
-            isReady: searchIndex.isAvailable() 
-        };
-    },
-
-    setReadyState: function() {
-        this.setState({ isReady: true });
-    },
-
-    componentDidMount: function() {
-        if (!this.state.isReady) {
-            searchIndex.on('components-available', this.setReadyState);
-        }
-    },
-
     getSearchResults: function() {
-        return searchIndex.filter(this.props.route.query);
+        return SearchFilter.filter(this.props.route.query);
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+        return (
+            this.props.route.query !== nextProps.route.query 
+        );
     },
 
     /* jshint quotmark:false, newcap:false */
     render: function() {
         return (
             <Layout className="search" query={this.props.route.query}>
-                { this.state.isReady ? 
-                    <ResultsTable results={this.getSearchResults()} /> :
-                    <Loader />
-                }
+                <ResultsTable results={this.getSearchResults()} />
             </Layout>
         );
     }

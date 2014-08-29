@@ -26,6 +26,9 @@ var params = {
     }
 };
 
+var ServerActions = require('app/actions/server');
+var NpmApi = require('app/api/npm-api');
+
 var controllers = {
     components: require('app/controllers/components')
 };
@@ -34,10 +37,15 @@ var stores = {
     components: require('app/stores/components-store')
 };
 
-for (var key in stores) {
-    if (stores[key].init) {
-        stores[key].init();
-    }
+function startNpmModulesPolling() {
+    // Have the API module listen for actions
+    NpmApi.listen();
+
+    // Do a request every once in a while
+    setInterval(ServerActions.getModulesFromNpm, config['poll-interval']);
+    
+    // Fetch straight away so we have something to deliver to clients
+    ServerActions.getModulesFromNpm();
 }
 
 function getPageTitle(query) {
@@ -105,4 +113,6 @@ server.route({
 
 server.start(function() {
     console.log('Server running at:', server.info.uri);
+
+    startNpmModulesPolling();
 });

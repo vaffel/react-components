@@ -6,7 +6,7 @@ var ComponentsStore = require('app/stores/components-store');
 module.exports = {
   
     componentsList: function(request, reply) {
-        var summaries = ComponentsStore.getComponentSummaries();
+        var summaries = ComponentsStore.getSummaries();
         var response = {
             keys: _.keys(summaries[0] || {}),
             items: _.map(summaries, _.values)

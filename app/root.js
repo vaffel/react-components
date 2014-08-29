@@ -3,13 +3,23 @@
 
 var _ = require('lodash');
 var React = require('react/addons');
+var Reflux = require('reflux');
 var router = require('app/router');
 var isBrowser = typeof window !== 'undefined';
 
+var RoutingActions = require('app/actions/routing');
+var ComponentStore = require('app/stores/components-store');
+var ComponentApi   = require('app/api/components-api');
+var ApiActions     = require('app/actions/api');
+var SearchIndex    = require('app/search/filter');
+
+// We'll want to use react-router when server-side rendering is ready
 router.setRoutes(require('app/routes'));
 
 var App = React.createClass({
     displayName: 'App',
+
+    mixins: [Reflux.ListenerMixin],
 
     propTypes: {
         path: React.PropTypes.string.isRequired
@@ -24,39 +34,53 @@ var App = React.createClass({
     componentDidMount: function() {
         window.addEventListener('popstate', this.onLocationChanged, false);
 
-        router.on('location-change', this.onLocationChanged);
+        this.listenTo(RoutingActions.locationChange, this.onLocationChanged);
     },
 
     componentWillUnmount: function() {
         window.removeEventListener('popstate', this.onLocationChanged, false);
-
-        router.removeListener('location-change', this.onLocationChanged);
     },
 
     onLocationChanged: function() {
         this.setState({ path: window.location.pathname + window.location.search });
     },
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
     render: function() {
         var match = router.match(this.state.path || this.props.path);
 
         if (!match) {
             console.error('Could not match URL (' + this.props.path + ')');
-            return null;
+            return null; // @todo render error-view?
         }
 
         return new match.page(_.merge({}, this.state, {
             query: match.query || {},
-            route: match.route || {},
+            route: match.route || {}
         }));
     }
 });
 
+// Have the API and search index listen for dispatcher events
+ComponentApi.listen();
+SearchIndex.listen();
+
 if (isBrowser) {
-    React.renderComponent(new App({
-        path: window.location.pathname + window.location.search
-    }), document.getElementById('root'));
+    // Allow React to leak into global namespace - enables devtools etc
+    window.React = React;
+
+    // Fetch components from API
+    ApiActions.fetchComponents();
+
+    // Wait for components list to be ready
+    ComponentStore.listen(function() {
+        // Render the app once the components list is ready
+        // (Normally, we'd just show a "loading"-state, but since
+        // we're rendering on server side...)
+        React.renderComponent(new App({
+            path: window.location.pathname + window.location.search
+        }), document.getElementById('root'));
+    });
 }
+
 
 module.exports = App;
