@@ -32,14 +32,15 @@ module.exports = function(request, params, template) {
     var rendered = templates[template](params);
 
     // Inject livereload?
-    return isDev ? liveReloadify(rendered) : rendered;
+    return isDev ? liveReloadify(request, rendered) : rendered;
 };
 
 /* jshint quotmark: double */
-function liveReloadify(rendered) {
-    var port = 35729;
-    var src = "' + (location.protocol || 'http:') + '//' + (location.hostname || 'localhost') + ':" + port + "/livereload.js?snipver=1";
-    var snippet = "\n<script>document.write('<script src=\"" + src + "\"><\\/script>')</script>\n";
+function liveReloadify(request, rendered) {
+    var port    = 35729,
+        host    = request.headers.host.replace(/:\d+/, ''),
+        url     = '//' + host + ':' + port + '/livereload.js?snipver=1',
+        snippet = '<script src="' + url + '"></script>';
 
     return rendered.replace(/<\/body>/, function(w) {
         return snippet + w;

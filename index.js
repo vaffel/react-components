@@ -2,14 +2,6 @@
 
 require('node-jsx').install({ extension: '.jsx' });
 
-// Process seem to fail every once in a while when DNS fails
-// I know this is evil, but until we can track down which
-// request is actually failing, I'll add this as a debug step
-process.on('uncaughtException', function (e) {
-    console.error('======= UNCAUGHT EXCEPTION ========')
-    console.error(e);
-});
-
 var _       = require('lodash');
 var config  = require('app/config');
 var Hapi    = require('hapi');
@@ -27,6 +19,7 @@ var params = {
     },
     'resources': {
         css: [
+            '/css/pure-min.css',
             '/css/codemirror.css',
             '/css/components.css'
         ],
@@ -65,21 +58,27 @@ function getPageTitle(query) {
         return params.page.title;
     }
 
-    return params.page.title + ' - ' + query;
+    return query + ' - ' + params.page.title;
 }
 
 function handleRequest(request, reply) {
     var reqParams = _.merge({}, params, {
         page: {
-            title: getPageTitle(request.params.query)
+            title: getPageTitle(request.params.query || request.params.component)
         }
     });
+
+    var liveReloadSrc = isDev ? ' localhost:35729' : '';
 
     reply(render(
         request,
         reqParams,
         tpl('default')
-    ));
+    )).header('Content-Security-Policy', [
+        'script-src \'self\'' + liveReloadSrc,
+        'frame-src \'none\'',
+        'object-src \'none\''
+    ].join(';'));
 }
 
 server.route({

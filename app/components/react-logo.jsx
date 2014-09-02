@@ -10,9 +10,11 @@ module.exports = React.createClass({
     render: function() {
         var classNames = ['react-logo'].concat(this.props.className);
 
-        return React.DOM.img(_.merge({}, this.props, {
-            src: '/img/react.svg',
-            className: classNames.join(' ')
-        }));
+        return React.DOM.a({ href: '/' },
+            React.DOM.img(_.merge({}, this.props, {
+                src: '/img/react.svg',
+                className: classNames.join(' ')
+            })
+        ));
     }
 });

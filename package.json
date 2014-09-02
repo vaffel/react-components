@@ -19,7 +19,8 @@
   ],
   "browser": {
     "request": "xhr",
-    "app/stores/components-store": "app/stores/components-store.browser"
+    "app/stores/components-store": "app/stores/components-store.browser",
+    "lodash": "./public/js/lodash.min"
   },
   "author": "Espen Hovlandsdal <espen@hovlandsdal.com>",
   "license": "MIT",

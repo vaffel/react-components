@@ -47,7 +47,7 @@ module.exports = React.createClass({
             CodeMirror(function(elt) {
                 preEl.parentNode.replaceChild(elt, preEl);
             }, _.merge({
-                value: codeEls[i].innerText,
+                value: codeEls[i].innerText.trim(),
                 mode: config['codemirror-modes'][lang] || 'javascript'
             }, mirrorOptions));
         }
