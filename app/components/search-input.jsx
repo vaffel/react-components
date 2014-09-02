@@ -39,7 +39,7 @@ module.exports = React.createClass({
     },
 
     getPageTitle: function(query) {
-        return config['page-title'] + (query ? (' - ' + query) : '');
+        return (query ? (query + ' - ') : '') + config['page-title'];
     },
 
     moveCaretToEnd: function() {
