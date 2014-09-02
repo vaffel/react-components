@@ -1,7 +1,6 @@
 'use strict';
 
 var _  = require('lodash');
-var Reflux = require('reflux');
 var ApiActions = require('app/actions/api');
 var request = require('xhr');
 var isFetchingList = false;

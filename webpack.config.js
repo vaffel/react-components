@@ -1,7 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
-
-module.exports = {
+var config = {
     cache: true,
     entry: {
         bundle: './app/root',
@@ -28,3 +27,11 @@ module.exports = {
         new webpack.ContextReplacementPlugin(/moment\.js[\/\\]lang$/, /^\.\/(de|pl)$/)
     ]
 };
+
+if (process.env.NODE_ENV !== 'development') {
+    config.plugins.push(new webpack.optimize.DedupePlugin());
+    config.plugins.push(new webpack.optimize.OccurenceOrderPlugin(true));
+    config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+}
+
+module.exports = config;
