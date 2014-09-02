@@ -6,9 +6,9 @@ var Reflux = require('reflux');
 var Loader = require('app/components/loader.jsx');
 var Layout = require('app/components/layout.jsx');
 var MarkdownReadme = require('app/components/markdown-readme.jsx');
-var ApiActions = require('app/actions/api');
 var ComponentStore = require('app/stores/components-store');
 var getGithubAccount = require('app/util/github-account');
+var numFormat = require('app/util/number-formatter');
 
 function getStateFromStores(name) {
     return {
@@ -42,6 +42,7 @@ module.exports = React.createClass({
         return 'https://github.com/' + account;
     },
 
+    /* jshint quotmark:false, newcap:false */
     getHomepageButton: function() {
         var githubUrl = this.getGithubUrl();
         var homePageUrl = this.state.componentInfo.homepage || '';
@@ -57,6 +58,7 @@ module.exports = React.createClass({
         return null;
     },
 
+    /* jshint quotmark:false, newcap:false */
     getGithubButton: function() {
         var githubUrl = this.getGithubUrl();
         if (!githubUrl) {
@@ -70,6 +72,7 @@ module.exports = React.createClass({
         );
     },
 
+    /* jshint quotmark:false, newcap:false */
     getGithubStarsButton: function() {
         var githubUrl = this.getGithubUrl();
 
@@ -79,15 +82,16 @@ module.exports = React.createClass({
 
         return (
             <a title="Number of stars on Github" href={githubUrl + '/stargazers'} className="pure-button">
-                <i className="fa fa-star" /> Stars
+                <i className="fa fa-star" /> { numFormat(this.state.componentInfo.starCount || 0) }
             </a>
         );
     },
 
+    /* jshint quotmark:false, newcap:false */
     getDownloadsButton: function() {
         return (
             <a title="Downloads last week" href={"https://www.npmjs.org/package/" + this.state.componentInfo.name} className="pure-button">
-                <i className="fa fa-arrow-circle-o-down" /> Downloads
+                <i className="fa fa-arrow-circle-o-down" /> { numFormat(this.state.componentInfo.downloads || 0) }
             </a>
         );
     },

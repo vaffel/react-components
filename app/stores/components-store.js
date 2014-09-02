@@ -45,7 +45,7 @@ var ComponentStore = Reflux.createStore({
     },
 
     getLastUpdated: function() {
-        return this.lastUpdated
+        return this.lastUpdated;
     },
 
     populate: function(components) {
@@ -87,6 +87,10 @@ var ComponentStore = Reflux.createStore({
 
     addComponent: function(component) {
         this.components[component.name] = this.parseComponent(component);
+
+        var existing = _.find(this.componentSummaries, { name: component.name });
+        _.pull(this.componentSummaries, existing);
+        
         this.componentSummaries.push(this.parseComponentSummary(component));
     },
 

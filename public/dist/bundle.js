@@ -1,4 +1,4 @@
-webpackJsonp([0],{
+webpackJsonp([1],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
@@ -541,7 +541,7 @@ webpackJsonp([0],{
 /***/ 189:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = {
+	/* WEBPACK VAR INJECTION */(function(process, __dirname) {module.exports = {
 	    'page-title': 'React Components',
 	    'npm-keyword': 'react-component',
 	    'poll-interval': 300000,
@@ -562,8 +562,17 @@ webpackJsonp([0],{
 	        'bash': 'shell',
 	        'batch': 'shell',
 	        'yaml': 'yaml'
+	    },
+	    'github': {
+	        'type': 'oauth',
+	        'key': process.env.GITHUB_KEY,
+	        'secret': process.env.GITHUB_SECRET
+	    },
+	    'cache': {
+	        'starCounts': __dirname + '/../data/starCounts.json'
 	    }
 	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), "/"))
 
 /***/ },
 
@@ -854,30 +863,51 @@ webpackJsonp([0],{
 	/** @jsx React.DOM */
 	'use strict';
 	
+	var _ = __webpack_require__(1);
 	var React  = __webpack_require__(187);
 	var Layout = __webpack_require__(188);
 	var ResultsTable = __webpack_require__(198);
-	var ComponentStore = __webpack_require__(172);
 	var SearchFilter = __webpack_require__(183);
 	
 	module.exports = React.createClass({
 	    displayName: 'SearchPage',
 	
+	    getInitialState: function() {
+	        return {
+	            sortBy: 'score',
+	            sortOrder: 'asc'
+	        };
+	    },
+	
 	    getSearchResults: function() {
-	        return SearchFilter.filter(this.props.route.query);
+	        var results = SearchFilter.filter(this.props.route.query),
+	            sorted  = _.sortBy(results, this.state.sortBy);
+	
+	        return this.state.sortOrder === 'desc' ? sorted : sorted.reverse();
 	    },
 	
 	    shouldComponentUpdate: function(nextProps, nextState) {
 	        return (
-	            this.props.route.query !== nextProps.route.query 
+	            this.props.route.query !== nextProps.route.query ||
+	            this.state.sortBy      !== nextState.sortBy      ||
+	            this.state.sortOrder   !== nextState.sortOrder
 	        );
+	    },
+	
+	    onSortClicked: function(sortBy) {
+	        var state = { sortBy: sortBy };
+	        if (sortBy === this.state.sortBy) {
+	            state.sortOrder = this.state.sortOrder === 'asc' ? 'desc' : 'asc';
+	        }
+	
+	        this.setState(state);
 	    },
 	
 	    /* jshint quotmark:false, newcap:false */
 	    render: function() {
 	        return (
 	            Layout({className: "search", query: this.props.route.query}, 
-	                ResultsTable({results: this.getSearchResults()})
+	                ResultsTable({onSortClicked: this.onSortClicked, results: this.getSearchResults()})
 	            )
 	        );
 	    }
@@ -909,16 +939,37 @@ webpackJsonp([0],{
 	        return this.props.results.map(this.getComponentItem);
 	    },
 	
+	    sortByName: function(e) {
+	        this.sortBy(e, 'name');
+	    },
+	
+	    sortByAuthor: function(e) {
+	        this.sortBy(e, 'author');
+	    },
+	
+	    sortByStars: function(e) {
+	        this.sortBy(e, 'stars');
+	    },
+	
+	    sortByUpdated: function(e) {
+	        this.sortBy(e, 'modified');
+	    },
+	
+	    sortBy: function(e, by) {
+	        e.preventDefault();
+	        this.props.onSortClicked(by);
+	    },
+	
 	    /* jshint quotmark:false, newcap:false */
 	    render: function() {
 	        return (
 	            React.DOM.table({className: "pure-table pure-table-horizontal results-table"}, 
 	                React.DOM.thead(null, 
 	                    React.DOM.tr(null, 
-	                        React.DOM.th({className: "name"}, React.DOM.a({href: "#"}, "Name")), 
-	                        React.DOM.th({className: "author"}, React.DOM.a({href: "#"}, "Author")), 
-	                        React.DOM.th({className: "stars"}, React.DOM.a({href: "#"}, "Stars")), 
-	                        React.DOM.th({className: "updated"}, React.DOM.a({href: "#"}, "Updated"))
+	                        React.DOM.th({className: "name"}, React.DOM.a({href: "#", tabIndex: "-1", onClick: this.sortByName}, "Name")), 
+	                        React.DOM.th({className: "author"}, React.DOM.a({href: "#", tabIndex: "-1", onClick: this.sortByAuthor}, "Author")), 
+	                        React.DOM.th({className: "stars"}, React.DOM.a({href: "#", tabIndex: "-1", onClick: this.sortByStars}, "Stars")), 
+	                        React.DOM.th({className: "updated"}, React.DOM.a({href: "#", tabIndex: "-1", onClick: this.sortByUpdated}, "Updated"))
 	                    )
 	                ), 
 	                React.DOM.tbody(null, 
@@ -997,12 +1048,12 @@ webpackJsonp([0],{
 	
 	var React  = __webpack_require__(187);
 	var Reflux = __webpack_require__(163);
-	var Loader = __webpack_require__(202);
+	var Loader = __webpack_require__(203);
 	var Layout = __webpack_require__(188);
-	var MarkdownReadme = __webpack_require__(203);
-	var ApiActions = __webpack_require__(174);
+	var MarkdownReadme = __webpack_require__(204);
 	var ComponentStore = __webpack_require__(172);
-	var GithubRegex = /github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;
+	var getGithubAccount = __webpack_require__(205);
+	var numFormat = __webpack_require__(206);
 	
 	function getStateFromStores(name) {
 	    return {
@@ -1028,7 +1079,7 @@ webpackJsonp([0],{
 	    },
 	
 	    getGithubUrl: function() {
-	        var account = this.getGithubAccount();
+	        var account = getGithubAccount(this.state.componentInfo);
 	        if (!account) {
 	            return false;
 	        }
@@ -1036,24 +1087,7 @@ webpackJsonp([0],{
 	        return 'https://github.com/' + account;
 	    },
 	
-	    getGithubAccount: function() {
-	        var info  = this.state.componentInfo,
-	            repo  = (info.repository || {}).url,
-	            page  = info.homepage,
-	            bugs  = (info.bugs || {}).url,
-	            parts = [repo, page, bugs].filter(Boolean);
-	
-	        var i = parts.length, matches;
-	        while (i--) {
-	            matches = parts[i].match(GithubRegex);
-	            if (matches[1]) {
-	                return matches[1];
-	            }
-	        }
-	
-	        return false;
-	    },
-	
+	    /* jshint quotmark:false, newcap:false */
 	    getHomepageButton: function() {
 	        var githubUrl = this.getGithubUrl();
 	        var homePageUrl = this.state.componentInfo.homepage || '';
@@ -1069,6 +1103,7 @@ webpackJsonp([0],{
 	        return null;
 	    },
 	
+	    /* jshint quotmark:false, newcap:false */
 	    getGithubButton: function() {
 	        var githubUrl = this.getGithubUrl();
 	        if (!githubUrl) {
@@ -1082,6 +1117,7 @@ webpackJsonp([0],{
 	        );
 	    },
 	
+	    /* jshint quotmark:false, newcap:false */
 	    getGithubStarsButton: function() {
 	        var githubUrl = this.getGithubUrl();
 	
@@ -1091,15 +1127,16 @@ webpackJsonp([0],{
 	
 	        return (
 	            React.DOM.a({title: "Number of stars on Github", href: githubUrl + '/stargazers', className: "pure-button"}, 
-	                React.DOM.i({className: "fa fa-star"}), " Stars"
+	                React.DOM.i({className: "fa fa-star"}), " ",  numFormat(this.state.componentInfo.starCount || 0) 
 	            )
 	        );
 	    },
 	
+	    /* jshint quotmark:false, newcap:false */
 	    getDownloadsButton: function() {
 	        return (
 	            React.DOM.a({title: "Downloads last week", href: "https://www.npmjs.org/package/" + this.state.componentInfo.name, className: "pure-button"}, 
-	                React.DOM.i({className: "fa fa-arrow-circle-o-down"}), " Downloads"
+	                React.DOM.i({className: "fa fa-arrow-circle-o-down"}), " ",  numFormat(this.state.componentInfo.downloads || 0) 
 	            )
 	        );
 	    },
@@ -1130,7 +1167,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 202:
+/***/ 203:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1157,7 +1194,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 203:
+/***/ 204:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1177,10 +1214,10 @@ webpackJsonp([0],{
 	
 	var _ = __webpack_require__(1);
 	var React = __webpack_require__(187);
-	var marked = __webpack_require__(204);
+	var marked = __webpack_require__(202);
 	var config = __webpack_require__(189);
+	var getGithubAccount = __webpack_require__(205);
 	var CodeMirror = typeof window === 'undefined' ? function() {} : window.CodeMirror;
-	var GithubRegex = /github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;
 	
 	var mirrorOptions = {
 	    lineNumbers: false,
@@ -1237,30 +1274,12 @@ webpackJsonp([0],{
 	    },
 	
 	    getGithubUrl: function() {
-	        var account = this.getGithubAccount();
+	        var account = getGithubAccount(this.props.component);
 	        if (!account) {
 	            return false;
 	        }
 	
 	        return 'https://github.com/' + account;
-	    },
-	
-	    getGithubAccount: function() {
-	        var info  = this.props.component,
-	            repo  = (info.repository || {}).url,
-	            page  = info.homepage,
-	            bugs  = (info.bugs || {}).url,
-	            parts = [repo, page, bugs].filter(Boolean);
-	
-	        var i = parts.length, matches;
-	        while (i--) {
-	            matches = parts[i].match(GithubRegex);
-	            if (matches[1]) {
-	                return matches[1];
-	            }
-	        }
-	
-	        return false;
 	    },
 	
 	    /* jshint quotmark:false, newcap:false */
@@ -1274,6 +1293,57 @@ webpackJsonp([0],{
 	        );
 	    }
 	});
+
+/***/ },
+
+/***/ 205:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var GithubRegex = /github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;
+	
+	module.exports = function(info) {
+	    var repo  = (info.repository || {}).url,
+	        page  = info.homepage,
+	        bugs  = (info.bugs || {}).url,
+	        parts = [repo, page, bugs].filter(Boolean);
+	
+	    var i = parts.length, matches;
+	    while (i--) {
+	        matches = parts[i].match(GithubRegex);
+	        if (matches[1]) {
+	            return matches[1];
+	        }
+	    }
+	
+	    return false;
+	};
+
+/***/ },
+
+/***/ 206:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var sepThousands = /\B(?=(?:\d{3})+(?!\d))/g;
+	
+	module.exports = function(num) {
+	    if (num < 1000) {
+	        return num;
+	    }
+	
+	    if (num < 10000) {
+	        return (num + '').replace(sepThousands, ' ');
+	    }
+	
+	    if (num < 1000000) {
+	        return Math.floor(num / 1000) + 'K';
+	    }
+	
+	    return (num / 1000000).toFixed(1) + 'M';
+	};
 
 /***/ }
 

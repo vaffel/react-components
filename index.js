@@ -25,6 +25,7 @@ var params = {
         ],
         js: [
             '/js/codemirror-compressed.js',
+            '/js/analytics.js',
             '/dist/vendor.bundle' + min + '.js',
             '/dist/bundle' + min + '.js',
         ]
@@ -78,13 +79,14 @@ function handleRequest(request, reply) {
     });
 
     var liveReloadSrc = isDev ? ' localhost:35729' : '';
+    var analyticsSrc = ' http://www.google-analytics.com https://www.google-analytics.com';
 
     reply(render(
         request,
         reqParams,
         tpl('default')
     )).header('Content-Security-Policy', [
-        'script-src \'self\'' + liveReloadSrc,
+        'script-src \'self\'' + liveReloadSrc + analyticsSrc,
         'frame-src \'none\'',
         'object-src \'none\''
     ].join(';'));
