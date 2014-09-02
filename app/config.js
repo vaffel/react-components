@@ -19,5 +19,13 @@ module.exports = {
         'bash': 'shell',
         'batch': 'shell',
         'yaml': 'yaml'
+    },
+    'github': {
+        'type': 'oauth',
+        'key': process.env.GITHUB_KEY,
+        'secret': process.env.GITHUB_SECRET
+    },
+    'cache': {
+        'starCounts': __dirname + '/../data/starCounts.json'
     }
 };

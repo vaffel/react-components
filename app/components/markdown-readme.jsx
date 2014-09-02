@@ -17,8 +17,8 @@ var _ = require('lodash');
 var React = require('react');
 var marked = require('marked');
 var config = require('app/config');
+var getGithubAccount = require('app/util/github-account');
 var CodeMirror = typeof window === 'undefined' ? function() {} : window.CodeMirror;
-var GithubRegex = /github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;
 
 var mirrorOptions = {
     lineNumbers: false,
@@ -75,30 +75,12 @@ module.exports = React.createClass({
     },
 
     getGithubUrl: function() {
-        var account = this.getGithubAccount();
+        var account = getGithubAccount(this.props.component);
         if (!account) {
             return false;
         }
 
         return 'https://github.com/' + account;
-    },
-
-    getGithubAccount: function() {
-        var info  = this.props.component,
-            repo  = (info.repository || {}).url,
-            page  = info.homepage,
-            bugs  = (info.bugs || {}).url,
-            parts = [repo, page, bugs].filter(Boolean);
-
-        var i = parts.length, matches;
-        while (i--) {
-            matches = parts[i].match(GithubRegex);
-            if (matches[1]) {
-                return matches[1];
-            }
-        }
-
-        return false;
     },
 
     /* jshint quotmark:false, newcap:false */

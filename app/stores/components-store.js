@@ -68,7 +68,9 @@ var ComponentStore = Reflux.createStore({
             author: this.parseAuthor(component),
             modified: moment.utc(component.time.modified),
             created: moment.utc(component.time.created),
-            keywords: component.keywords.filter(this.isUncommonKeyword)
+            keywords: component.keywords.filter(this.isUncommonKeyword),
+            downloads: component.downloads || 0,
+            stars: component.starCount
         };
     },
 

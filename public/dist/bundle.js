@@ -6,20 +6,20 @@ webpackJsonp([0],{
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var _ = __webpack_require__(2);
+	var _ = __webpack_require__(1);
 	var React = __webpack_require__(3);
-	var Reflux = __webpack_require__(6);
-	var router = __webpack_require__(13);
+	var Reflux = __webpack_require__(163);
+	var router = __webpack_require__(170);
 	var isBrowser = typeof window !== 'undefined';
 	
-	var RoutingActions = __webpack_require__(15);
-	var ComponentStore = __webpack_require__(17);
-	var ComponentApi   = __webpack_require__(18);
-	var ApiActions     = __webpack_require__(16);
-	var SearchIndex    = __webpack_require__(19);
+	var RoutingActions = __webpack_require__(171);
+	var ComponentStore = __webpack_require__(172);
+	var ComponentApi   = __webpack_require__(175);
+	var ApiActions     = __webpack_require__(174);
+	var SearchIndex    = __webpack_require__(183);
 	
 	// We'll want to use react-router when server-side rendering is ready
-	router.setRoutes(__webpack_require__(14));
+	router.setRoutes(__webpack_require__(185));
 	
 	var App = React.createClass({
 	    displayName: 'App',
@@ -92,13 +92,13 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 13:
+/***/ 170:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var queryParser = /(?:^|&)([^&=]*)=?([^&]*)/g;
-	var RoutingActions = __webpack_require__(15);
+	var RoutingActions = __webpack_require__(171);
 	var map = {};
 	
 	var Router = {
@@ -162,29 +162,12 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 14:
+/***/ 171:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Front  = __webpack_require__(25);
-	var Search = __webpack_require__(26);
-	var ComponentInfo = __webpack_require__(27);
-	
-	module.exports = {
-	    '/': Front,
-	    '/search/:query': Search,
-	    '/component/:componentName': ComponentInfo 
-	};
-
-/***/ },
-
-/***/ 15:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Reflux = __webpack_require__(6);
+	var Reflux = __webpack_require__(163);
 	
 	module.exports = Reflux.createActions([
 	    'locationChange'
@@ -192,34 +175,15 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 16:
+/***/ 172:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Reflux = __webpack_require__(6);
-	
-	module.exports = Reflux.createActions([
-	    'fetchComponents',
-	    'fetchFailed',
-	    'componentsFetched',
-	
-	    'fetchComponentInfo',
-	    'fetchComponentFailed',
-	    'componentFetched'
-	]);
-
-/***/ },
-
-/***/ 17:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _ = __webpack_require__(2);
-	var moment = __webpack_require__(5);
-	var Reflux = __webpack_require__(6);
-	var ApiActions = __webpack_require__(16);
+	var _ = __webpack_require__(1);
+	var moment = __webpack_require__(173);
+	var Reflux = __webpack_require__(163);
+	var ApiActions = __webpack_require__(174);
 	
 	var ComponentStore = Reflux.createStore({
 	    init: function() {
@@ -289,15 +253,34 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 18:
+/***/ 174:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _  = __webpack_require__(2);
-	var Reflux = __webpack_require__(6);
-	var ApiActions = __webpack_require__(16);
-	var request = __webpack_require__(1);
+	var Reflux = __webpack_require__(163);
+	
+	module.exports = Reflux.createActions([
+	    'fetchComponents',
+	    'fetchFailed',
+	    'componentsFetched',
+	
+	    'fetchComponentInfo',
+	    'fetchComponentFailed',
+	    'componentFetched'
+	]);
+
+/***/ },
+
+/***/ 175:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _  = __webpack_require__(1);
+	var Reflux = __webpack_require__(163);
+	var ApiActions = __webpack_require__(174);
+	var request = __webpack_require__(176);
 	var isFetchingList = false;
 	
 	var ComponentsApi = {
@@ -341,13 +324,13 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 19:
+/***/ 183:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var _ = __webpack_require__(2);
-	var lunr = __webpack_require__(4);
-	var ComponentStore = __webpack_require__(17);
+	var _ = __webpack_require__(1);
+	var lunr = __webpack_require__(184);
+	var ComponentStore = __webpack_require__(172);
 	var index = getNewIndex();
 	
 	function getNewIndex() {
@@ -394,17 +377,34 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 25:
+/***/ 185:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Front  = __webpack_require__(186);
+	var Search = __webpack_require__(197);
+	var ComponentInfo = __webpack_require__(201);
+	
+	module.exports = {
+	    '/': Front,
+	    '/search/:query': Search,
+	    '/component/:componentName': ComponentInfo 
+	};
+
+/***/ },
+
+/***/ 186:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(40);
-	var Reflux = __webpack_require__(6);
-	var Layout = __webpack_require__(83);
-	var ComponentList = __webpack_require__(84);
-	var ComponentStore = __webpack_require__(17);
+	var React = __webpack_require__(187);
+	var Reflux = __webpack_require__(163);
+	var Layout = __webpack_require__(188);
+	var ComponentList = __webpack_require__(194);
+	var ComponentStore = __webpack_require__(172);
 	
 	function getStateFromStores() {
 	    return {
@@ -487,17 +487,378 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 26:
+/***/ 187:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(7);
+
+
+/***/ },
+
+/***/ 188:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React  = __webpack_require__(40);
-	var Layout = __webpack_require__(83);
-	var ResultsTable = __webpack_require__(85);
-	var ComponentStore = __webpack_require__(17);
-	var SearchFilter = __webpack_require__(19);
+	var React = __webpack_require__(187);
+	var config = __webpack_require__(189);
+	var Footer = __webpack_require__(190);
+	var Container = __webpack_require__(191);
+	var ReactLogo = __webpack_require__(192);
+	var SearchInput = __webpack_require__(193);
+	
+	module.exports = React.createClass({
+	    displayName: 'Layout',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.div(null, 
+	                React.DOM.header(null, 
+	                    Container(null, 
+	                        ReactLogo(null), 
+	                        React.DOM.h1(null, React.DOM.a({href: "/"}, config['page-title'])), 
+	
+	                        SearchInput({query: this.props.query || '', autoFocus: this.props.autoFocusSearch})
+	                    )
+	                ), 
+	
+	                React.DOM.main(null, 
+	                    Container({className: this.props.className || ''}, 
+	                        this.props.children
+	                    )
+	                ), 
+	
+	                Footer(null)
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 189:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = {
+	    'page-title': 'React Components',
+	    'npm-keyword': 'react-component',
+	    'poll-interval': 300000,
+	    'exclude-keywords': ['react', 'react-component'],
+	    'codemirror-modes': {
+	        'cs': 'coffeescript',
+	        'coffeescript': 'coffeescript',
+	        'coffee': 'coffeescript',
+	        'css': 'css',
+	        'html': 'htmlmixed',
+	        'javascript': 'javscript',
+	        'js': 'javascript',
+	        'php': 'php',
+	        'ruby': 'ruby',
+	        'rb': 'rb',
+	        'shell': 'shell',
+	        'sh': 'shell',
+	        'bash': 'shell',
+	        'batch': 'shell',
+	        'yaml': 'yaml'
+	    }
+	};
+
+/***/ },
+
+/***/ 190:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'Footer',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.footer(null, 
+	                "Made by ", React.DOM.a({href: "http://vaffel.ninja/"}, "VaffelNinja AS"), ". ", React.DOM.a({href: "https://github.com/vaffel/react-components"}, "Open-source"), "." 
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 191:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'Container',
+	
+	    /* jshint trailing:false, quotmark:false, newcap:false */
+	    render: function() {
+	        return this.transferPropsTo(
+	            React.DOM.div({className: "container"}, this.props.children)
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 192:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _ = __webpack_require__(1);
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'ReactLogo',
+	
+	    /* jshint trailing:false, quotmark:false, newcap:false */
+	    render: function() {
+	        var classNames = ['react-logo'].concat(this.props.className);
+	
+	        return React.DOM.a({ href: '/' },
+	            React.DOM.img(_.merge({}, this.props, {
+	                src: '/img/react.svg',
+	                className: classNames.join(' ')
+	            })
+	        ));
+	    }
+	});
+
+/***/ },
+
+/***/ 193:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React  = __webpack_require__(187);
+	var config = __webpack_require__(189);
+	var router = __webpack_require__(170);
+	
+	module.exports = React.createClass({
+	    displayName: 'SearchInput',
+	
+	    propTypes: {
+	        autoFocus: React.PropTypes.bool,
+	        placeholder: React.PropTypes.string,
+	        query: React.PropTypes.string
+	    },
+	
+	    getDefaultProps: function() {
+	        return {
+	            autoFocus: true,
+	            placeholder: 'Component name, keyword or similar',
+	            query: ''
+	        };
+	    },
+	
+	    getInitialState: function() {
+	        return {
+	            query: this.props.query
+	        };
+	    },
+	
+	    componentDidMount: function() {
+	        // Use to bring up the "looking glass"-icon
+	        this.getDOMNode().setAttribute('results', 5);
+	
+	        // Focus the END of the input (if it has a value and autofocus is set to true)
+	        if (this.props.query && this.props.autoFocus) {
+	            this.moveCaretToEnd();
+	        }
+	    },
+	
+	    getPageTitle: function(query) {
+	        return config['page-title'] + (query ? (' - ' + query) : '');
+	    },
+	
+	    moveCaretToEnd: function() {
+	        var el = this.getDOMNode();
+	        if (typeof el.selectionStart === 'number') {
+	            el.selectionStart = el.selectionEnd = el.value.length;
+	        } else if (typeof el.createTextRange !== 'undefined') {
+	            el.focus();
+	            var range = el.createTextRange();
+	            range.collapse(false);
+	            range.select();
+	        }
+	    },
+	
+	    onQueryChange: function(e) {
+	        var state = { query: e.target.value },
+	            url   = state.query ? '/search/' + encodeURIComponent(state.query) : '/',
+	            title = this.getPageTitle(state.query);
+	
+	        if (this.state.query) {
+	            history.replaceState(state, title, url);
+	        } else {
+	            history.pushState(state, title, url);
+	        }
+	
+	        router.locationChanged();
+	
+	        window.document.title = title;
+	        this.setState(state);
+	    },
+	
+	    /* jshint trailing:false, quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.input({
+	                type: "search", 
+	                className: "search", 
+	                onChange: this.onQueryChange, 
+	                defaultValue: this.props.query, 
+	                value: this.state.query, 
+	                placeholder: this.props.placeholder, 
+	                autoFocus: this.props.autoFocus}
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 194:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var ComponentItem = __webpack_require__(195);
+	
+	module.exports = React.createClass({
+	    displayName: 'LatestComponents',
+	
+	    propTypes: {
+	        components: React.PropTypes.array.isRequired,
+	        listName:   React.PropTypes.string.isRequired,
+	        className:  React.PropTypes.string
+	    },
+	
+	    getDefaultProps: function() {
+	        return {
+	            className: 'component-list'
+	        };
+	    },
+	
+	    getComponentItem: function(c) {
+	        return new ComponentItem({
+	            key: c.name,
+	            component: c
+	        });
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.section({className: this.props.className}, 
+	                React.DOM.h2(null, this.props.listName), 
+	
+	                React.DOM.ul(null, 
+	                    this.props.components.map(this.getComponentItem)
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 195:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var ComponentLink = __webpack_require__(196);
+	
+	module.exports = React.createClass({
+	    displayName: 'ComponentItem',
+	
+	    propTypes: {
+	        component: React.PropTypes.object.isRequired
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.li(null, 
+	                ComponentLink({component: this.props.component})
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 196:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React  = __webpack_require__(187);
+	var config = __webpack_require__(189);
+	var router = __webpack_require__(170);
+	
+	module.exports = React.createClass({
+	    displayName: 'ComponentLink',
+	
+	    getUrl: function() {
+	        return '/component/' + encodeURIComponent(this.props.component.name);
+	    },
+	
+	    onClick: function(e) {
+	        // If trying to open a new window, fall back
+	        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.button === 2) {
+	            return;
+	        }
+	
+	        e.preventDefault();
+	
+	        var pageTitle = this.props.component.name + ' - ' + config['page-title'];
+	        history.pushState({}, pageTitle, e.target.href);
+	        router.locationChanged();
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.a({className: "component-name", href: this.getUrl(), onClick: this.onClick}, 
+	                this.props.children ||  this.props.component.name
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 197:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React  = __webpack_require__(187);
+	var Layout = __webpack_require__(188);
+	var ResultsTable = __webpack_require__(198);
+	var ComponentStore = __webpack_require__(172);
+	var SearchFilter = __webpack_require__(183);
 	
 	module.exports = React.createClass({
 	    displayName: 'SearchPage',
@@ -524,19 +885,123 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 27:
+/***/ 198:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React  = __webpack_require__(40);
-	var Reflux = __webpack_require__(6);
-	var Loader = __webpack_require__(86);
-	var Layout = __webpack_require__(83);
-	var MarkdownReadme = __webpack_require__(87);
-	var ApiActions = __webpack_require__(16);
-	var ComponentStore = __webpack_require__(17);
+	var React = __webpack_require__(187);
+	var SearchResult = __webpack_require__(199);
+	var NoResult = __webpack_require__(200);
+	
+	module.exports = React.createClass({
+	    displayName: 'SearchResultsTable',
+	
+	    getComponentItem: function(item) {
+	        return new SearchResult({
+	            key: item.name,
+	            component: item
+	        });
+	    },
+	
+	    getSearchResults: function() {
+	        return this.props.results.map(this.getComponentItem);
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.table({className: "pure-table pure-table-horizontal results-table"}, 
+	                React.DOM.thead(null, 
+	                    React.DOM.tr(null, 
+	                        React.DOM.th({className: "name"}, React.DOM.a({href: "#"}, "Name")), 
+	                        React.DOM.th({className: "author"}, React.DOM.a({href: "#"}, "Author")), 
+	                        React.DOM.th({className: "stars"}, React.DOM.a({href: "#"}, "Stars")), 
+	                        React.DOM.th({className: "updated"}, React.DOM.a({href: "#"}, "Updated"))
+	                    )
+	                ), 
+	                React.DOM.tbody(null, 
+	                     this.props.results.length ?
+	                        this.getSearchResults() : 
+	                        NoResult(null)
+	                    
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 199:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var ComponentLink = __webpack_require__(196);
+	
+	module.exports = React.createClass({
+	    displayName: 'SearchResultItem',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.tr(null, 
+	                React.DOM.td(null, 
+	                    ComponentLink({component: this.props.component}), 
+	                    React.DOM.p({className: "description"}, this.props.component.description)
+	                ), 
+	                React.DOM.td(null, this.props.component.author), 
+	                React.DOM.td(null, this.props.component.stars || 0), 
+	                React.DOM.td(null, this.props.component.modified.fromNow())
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 200:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'NoResult',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.tr(null, 
+	                React.DOM.td({colSpan: "4", className: "no-result"}, 
+	                    "Your search did not return any results, unfortunately."
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 201:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React  = __webpack_require__(187);
+	var Reflux = __webpack_require__(163);
+	var Loader = __webpack_require__(202);
+	var Layout = __webpack_require__(188);
+	var MarkdownReadme = __webpack_require__(203);
+	var ApiActions = __webpack_require__(174);
+	var ComponentStore = __webpack_require__(172);
 	var GithubRegex = /github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;
 	
 	function getStateFromStores(name) {
@@ -665,160 +1130,13 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 40:
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(29);
-
-
-/***/ },
-
-/***/ 83:
+/***/ 202:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	
-	var React = __webpack_require__(40);
-	var config = __webpack_require__(153);
-	var Footer = __webpack_require__(154);
-	var Container = __webpack_require__(155);
-	var ReactLogo = __webpack_require__(156);
-	var SearchInput = __webpack_require__(157);
-	
-	module.exports = React.createClass({
-	    displayName: 'Layout',
-	
-	    /* jshint quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.div(null, 
-	                React.DOM.header(null, 
-	                    Container(null, 
-	                        ReactLogo(null), 
-	                        React.DOM.h1(null, React.DOM.a({href: "/"}, config['page-title'])), 
-	
-	                        SearchInput({query: this.props.query || '', autoFocus: this.props.autoFocusSearch})
-	                    )
-	                ), 
-	
-	                React.DOM.main(null, 
-	                    Container({className: this.props.className || ''}, 
-	                        this.props.children
-	                    )
-	                ), 
-	
-	                Footer(null)
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 84:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React = __webpack_require__(40);
-	var ComponentItem = __webpack_require__(158);
-	
-	module.exports = React.createClass({
-	    displayName: 'LatestComponents',
-	
-	    propTypes: {
-	        components: React.PropTypes.array.isRequired,
-	        listName:   React.PropTypes.string.isRequired,
-	        className:  React.PropTypes.string
-	    },
-	
-	    getDefaultProps: function() {
-	        return {
-	            className: 'component-list'
-	        };
-	    },
-	
-	    getComponentItem: function(c) {
-	        return new ComponentItem({
-	            key: c.name,
-	            component: c
-	        });
-	    },
-	
-	    /* jshint quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.section({className: this.props.className}, 
-	                React.DOM.h2(null, this.props.listName), 
-	
-	                React.DOM.ul(null, 
-	                    this.props.components.map(this.getComponentItem)
-	                )
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 85:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React = __webpack_require__(40);
-	var SearchResult = __webpack_require__(159);
-	var NoResult = __webpack_require__(160);
-	
-	module.exports = React.createClass({
-	    displayName: 'SearchResultsTable',
-	
-	    getComponentItem: function(item) {
-	        return new SearchResult({
-	            key: item.name,
-	            component: item
-	        });
-	    },
-	
-	    getSearchResults: function() {
-	        return this.props.results.map(this.getComponentItem);
-	    },
-	
-	    /* jshint quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.table({className: "pure-table pure-table-horizontal results-table"}, 
-	                React.DOM.thead(null, 
-	                    React.DOM.tr(null, 
-	                        React.DOM.th({className: "name"}, React.DOM.a({href: "#"}, "Name")), 
-	                        React.DOM.th({className: "author"}, React.DOM.a({href: "#"}, "Author")), 
-	                        React.DOM.th({className: "stars"}, React.DOM.a({href: "#"}, "Stars")), 
-	                        React.DOM.th({className: "updated"}, React.DOM.a({href: "#"}, "Updated"))
-	                    )
-	                ), 
-	                React.DOM.tbody(null, 
-	                     this.props.results.length ?
-	                        this.getSearchResults() : 
-	                        NoResult(null)
-	                    
-	                )
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 86:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React = __webpack_require__(40);
+	var React = __webpack_require__(187);
 	
 	module.exports = React.createClass({
 	    displayName: 'Loader',
@@ -839,7 +1157,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 87:
+/***/ 203:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -857,10 +1175,10 @@ webpackJsonp([0],{
 	    || navigator.userAgent.match(/Windows Phone/i)
 	));
 	
-	var _ = __webpack_require__(2);
-	var React = __webpack_require__(40);
-	var marked = __webpack_require__(7);
-	var config = __webpack_require__(153);
+	var _ = __webpack_require__(1);
+	var React = __webpack_require__(187);
+	var marked = __webpack_require__(204);
+	var config = __webpack_require__(189);
 	var CodeMirror = typeof window === 'undefined' ? function() {} : window.CodeMirror;
 	var GithubRegex = /github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;
 	
@@ -952,324 +1270,6 @@ webpackJsonp([0],{
 	            React.DOM.section({
 	                className: "readme", 
 	                dangerouslySetInnerHTML: { __html: html}}
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 153:
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = {
-	    'page-title': 'React Components',
-	    'npm-keyword': 'react-component',
-	    'poll-interval': 300000,
-	    'exclude-keywords': ['react', 'react-component'],
-	    'codemirror-modes': {
-	        'cs': 'coffeescript',
-	        'coffeescript': 'coffeescript',
-	        'coffee': 'coffeescript',
-	        'css': 'css',
-	        'html': 'htmlmixed',
-	        'javascript': 'javscript',
-	        'js': 'javascript',
-	        'php': 'php',
-	        'ruby': 'ruby',
-	        'rb': 'rb',
-	        'shell': 'shell',
-	        'sh': 'shell',
-	        'bash': 'shell',
-	        'batch': 'shell',
-	        'yaml': 'yaml'
-	    }
-	};
-
-/***/ },
-
-/***/ 154:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React = __webpack_require__(40);
-	
-	module.exports = React.createClass({
-	    displayName: 'Footer',
-	
-	    /* jshint quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.footer(null, 
-	                "Made by ", React.DOM.a({href: "http://vaffel.ninja/"}, "VaffelNinja AS"), ". ", React.DOM.a({href: "https://github.com/vaffel/react-components"}, "Open-source"), "." 
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 155:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React = __webpack_require__(40);
-	
-	module.exports = React.createClass({
-	    displayName: 'Container',
-	
-	    /* jshint trailing:false, quotmark:false, newcap:false */
-	    render: function() {
-	        return this.transferPropsTo(
-	            React.DOM.div({className: "container"}, this.props.children)
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 156:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _ = __webpack_require__(2);
-	var React = __webpack_require__(40);
-	
-	module.exports = React.createClass({
-	    displayName: 'ReactLogo',
-	
-	    /* jshint trailing:false, quotmark:false, newcap:false */
-	    render: function() {
-	        var classNames = ['react-logo'].concat(this.props.className);
-	
-	        return React.DOM.a({ href: '/' },
-	            React.DOM.img(_.merge({}, this.props, {
-	                src: '/img/react.svg',
-	                className: classNames.join(' ')
-	            })
-	        ));
-	    }
-	});
-
-/***/ },
-
-/***/ 157:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React  = __webpack_require__(40);
-	var config = __webpack_require__(153);
-	var router = __webpack_require__(13);
-	
-	module.exports = React.createClass({
-	    displayName: 'SearchInput',
-	
-	    propTypes: {
-	        autoFocus: React.PropTypes.bool,
-	        placeholder: React.PropTypes.string,
-	        query: React.PropTypes.string
-	    },
-	
-	    getDefaultProps: function() {
-	        return {
-	            autoFocus: true,
-	            placeholder: 'Component name, keyword or similar',
-	            query: ''
-	        };
-	    },
-	
-	    getInitialState: function() {
-	        return {
-	            query: this.props.query
-	        };
-	    },
-	
-	    componentDidMount: function() {
-	        // Use to bring up the "looking glass"-icon
-	        this.getDOMNode().setAttribute('results', 5);
-	
-	        // Focus the END of the input (if it has a value and autofocus is set to true)
-	        if (this.props.query && this.props.autoFocus) {
-	            this.moveCaretToEnd();
-	        }
-	    },
-	
-	    getPageTitle: function(query) {
-	        return config['page-title'] + (query ? (' - ' + query) : '');
-	    },
-	
-	    moveCaretToEnd: function() {
-	        var el = this.getDOMNode();
-	        if (typeof el.selectionStart === 'number') {
-	            el.selectionStart = el.selectionEnd = el.value.length;
-	        } else if (typeof el.createTextRange !== 'undefined') {
-	            el.focus();
-	            var range = el.createTextRange();
-	            range.collapse(false);
-	            range.select();
-	        }
-	    },
-	
-	    onQueryChange: function(e) {
-	        var state = { query: e.target.value },
-	            url   = state.query ? '/search/' + encodeURIComponent(state.query) : '/',
-	            title = this.getPageTitle(state.query);
-	
-	        if (this.state.query) {
-	            history.replaceState(state, title, url);
-	        } else {
-	            history.pushState(state, title, url);
-	        }
-	
-	        router.locationChanged();
-	
-	        window.document.title = title;
-	        this.setState(state);
-	    },
-	
-	    /* jshint trailing:false, quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.input({
-	                type: "search", 
-	                className: "search", 
-	                onChange: this.onQueryChange, 
-	                defaultValue: this.props.query, 
-	                value: this.state.query, 
-	                placeholder: this.props.placeholder, 
-	                autoFocus: this.props.autoFocus}
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 158:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React = __webpack_require__(40);
-	var ComponentLink = __webpack_require__(190);
-	
-	module.exports = React.createClass({
-	    displayName: 'ComponentItem',
-	
-	    propTypes: {
-	        component: React.PropTypes.object.isRequired
-	    },
-	
-	    /* jshint quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.li(null, 
-	                ComponentLink({component: this.props.component})
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 159:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React = __webpack_require__(40);
-	var ComponentLink = __webpack_require__(190);
-	
-	module.exports = React.createClass({
-	    displayName: 'SearchResultItem',
-	
-	    /* jshint quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.tr(null, 
-	                React.DOM.td(null, 
-	                    ComponentLink({component: this.props.component}), 
-	                    React.DOM.p({className: "description"}, this.props.component.description)
-	                ), 
-	                React.DOM.td(null, this.props.component.author), 
-	                React.DOM.td(null, this.props.component.stars || 0), 
-	                React.DOM.td(null, this.props.component.modified.fromNow())
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 160:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React = __webpack_require__(40);
-	
-	module.exports = React.createClass({
-	    displayName: 'NoResult',
-	
-	    /* jshint quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.tr(null, 
-	                React.DOM.td({colSpan: "4", className: "no-result"}, 
-	                    "Your search did not return any results, unfortunately."
-	                )
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-
-/***/ 190:
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	'use strict';
-	
-	var React  = __webpack_require__(40);
-	var config = __webpack_require__(153);
-	var router = __webpack_require__(13);
-	
-	module.exports = React.createClass({
-	    displayName: 'ComponentLink',
-	
-	    getUrl: function() {
-	        return '/component/' + encodeURIComponent(this.props.component.name);
-	    },
-	
-	    onClick: function(e) {
-	        // If trying to open a new window, fall back
-	        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.button === 2) {
-	            return;
-	        }
-	
-	        e.preventDefault();
-	
-	        var pageTitle = this.props.component.name + ' - ' + config['page-title'];
-	        history.pushState({}, pageTitle, e.target.href);
-	        router.locationChanged();
-	    },
-	
-	    /* jshint quotmark:false, newcap:false */
-	    render: function() {
-	        return (
-	            React.DOM.a({className: "component-name", href: this.getUrl(), onClick: this.onClick}, 
-	                this.props.children ||  this.props.component.name
 	            )
 	        );
 	    }

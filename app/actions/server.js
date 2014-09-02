@@ -7,5 +7,6 @@ module.exports = Reflux.createActions([
     'getModulesFromNpm',
     'moduleFetchFailed',
     'modulesFetched',
-    'getModuleDownloadCount'
+    'getModuleDownloadCount',
+    'initStarCountsFromCache'
 ]);

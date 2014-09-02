@@ -8,7 +8,7 @@ var Layout = require('app/components/layout.jsx');
 var MarkdownReadme = require('app/components/markdown-readme.jsx');
 var ApiActions = require('app/actions/api');
 var ComponentStore = require('app/stores/components-store');
-var GithubRegex = /github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;
+var getGithubAccount = require('app/util/github-account');
 
 function getStateFromStores(name) {
     return {
@@ -34,30 +34,12 @@ module.exports = React.createClass({
     },
 
     getGithubUrl: function() {
-        var account = this.getGithubAccount();
+        var account = getGithubAccount(this.state.componentInfo);
         if (!account) {
             return false;
         }
 
         return 'https://github.com/' + account;
-    },
-
-    getGithubAccount: function() {
-        var info  = this.state.componentInfo,
-            repo  = (info.repository || {}).url,
-            page  = info.homepage,
-            bugs  = (info.bugs || {}).url,
-            parts = [repo, page, bugs].filter(Boolean);
-
-        var i = parts.length, matches;
-        while (i--) {
-            matches = parts[i].match(GithubRegex);
-            if (matches[1]) {
-                return matches[1];
-            }
-        }
-
-        return false;
     },
 
     getHomepageButton: function() {

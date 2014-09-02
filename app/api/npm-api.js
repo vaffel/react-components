@@ -5,7 +5,8 @@ var config        = require('app/config'),
     JSONStream    = require('JSONStream'),
     eventStream   = require('event-stream'), 
     qs            = require('querystring'),
-    ServerActions = require('app/actions/server');
+    ServerActions = require('app/actions/server'),
+    GithubApi     = require('app/api/github-api');
 
 var registryUrl   = 'https://registry.npmjs.org',
     viewsPath     = '-/_view',
@@ -42,14 +43,20 @@ var NpmApi = {
             .pipe(eventStream.mapSync(parseModule))
             .pipe(eventStream.map(NpmApi.getModuleInfo))
             .on('error', function(err) { console.error('Error fetching module info: ', err); })
+            .pipe(eventStream.map(NpmApi.getModuleDownloadCount))
+            .on('error', function(err) { console.error('Error fetching module download count: ', err); })
+            .pipe(eventStream.map(GithubApi.populateModuleStarCount))
+            .on('error', function(err) { console.error('Error fetching github star counts: ', err); })
             .pipe(eventStream.writeArray(onComplete));
     },
 
     getModuleDownloadCount: function(module, callback) {
-        var url = [dlCountUrl, encodeURIComponent(module)].join('/');
+        var moduleName = module.name ? module.name : module,
+            url = [dlCountUrl, encodeURIComponent(moduleName)].join('/');
 
         request({ url: url, json: true }, function(err, res, response) {
-            callback(err, response);
+            module.downloads = (response || {}).downloads;
+            callback(err, module);
         });
     },
 
