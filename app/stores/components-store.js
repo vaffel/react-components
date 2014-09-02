@@ -10,6 +10,7 @@ var ComponentStore = Reflux.createStore({
     init: function() {
         this.components = {};
         this.componentSummaries = [];
+        this.lastUpdated = Date.now();
 
         this.listenTo(ServerActions.modulesFetched, this.populate);
     },
@@ -38,10 +39,17 @@ var ComponentStore = Reflux.createStore({
         var mostRecent  = this.getMostRecentlyCreated();
         var lastUpdated = _.sortBy(this.components, 'modified').reverse();
 
-        return _.without.apply(null, [lastUpdated].concat(mostRecent)).slice(0, limit || 10);
+        return _.without.apply(null,
+            [lastUpdated].concat(mostRecent)
+        ).slice(0, limit || 10);
+    },
+
+    getLastUpdated: function() {
+        return this.lastUpdated
     },
 
     populate: function(components) {
+        this.lastUpdated = Date.now();
         components.map(this.addComponent.bind(this));
         this.trigger('change');
     },
@@ -58,15 +66,19 @@ var ComponentStore = Reflux.createStore({
             name: component.name,
             description: component.description,
             author: this.parseAuthor(component),
-            modified: moment(component.time.modified),
-            created: moment(component.time.created),
+            modified: moment.utc(component.time.modified),
+            created: moment.utc(component.time.created),
             keywords: component.keywords.filter(this.isUncommonKeyword)
         };
     },
 
     parseComponent: function(component) {
-        component.created = component.time.created;
+        var distTags = component['dist-tags'] || {},
+            latest   = component.versions[distTags.latest] || {};
+
+        component.created  = component.time.created;
         component.modified = component.time.modified;
+        component.branch   = latest.gitHead || 'master';
 
         return component;
     },

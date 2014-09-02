@@ -11,10 +11,15 @@ var ComponentStore = Reflux.createStore({
         this.componentSummaries = [];
 
         this.listenTo(ApiActions.componentsFetched, this.populate);
+        this.listenTo(ApiActions.componentFetched, this.addComponentInfo);
     },
 
     get: function(name) {
-        return this.components[name];
+        if (this.components[name]) {
+            return this.components[name];
+        }
+
+        ApiActions.fetchComponentInfo(name);
     },
 
     getAll: function() {
@@ -27,7 +32,7 @@ var ComponentStore = Reflux.createStore({
 
     getMostRecentlyCreated: function(limit) {
         return (
-            _.sortBy(this.components, 'created')
+            _.sortBy(this.componentSummaries, 'created')
             .reverse()
             .slice(0, limit || 10)
         );
@@ -35,19 +40,19 @@ var ComponentStore = Reflux.createStore({
 
     getMostRecentlyUpdated: function(limit) {
         var mostRecent  = this.getMostRecentlyCreated();
-        var lastUpdated = _.sortBy(this.components, 'modified').reverse();
+        var lastUpdated = _.sortBy(this.componentSummaries, 'modified').reverse();
 
         return _.without.apply(null, [lastUpdated].concat(mostRecent)).slice(0, limit || 10);
     },
 
     populate: function(components) {
-        components.map(this.addComponent.bind(this));
+        components.map(this.addComponent);
         this.trigger('change');
     },
 
     parseComponent: function(component) {
-        component.modified = moment(component.modified);
-        component.created  = moment(component.created);
+        component.modified = moment.utc(component.modified);
+        component.created  = moment.utc(component.created);
 
         return component;
     },
@@ -55,9 +60,13 @@ var ComponentStore = Reflux.createStore({
     addComponent: function(component) {
         component = this.parseComponent(component);
         
-        this.components[component.name] = component;
         this.componentSummaries.push(component);
+    },
+
+    addComponentInfo: function(component) {
+        this.components[component.name] = component;
+        this.trigger('change');
     }
 });
 
-module.exports = ComponentStore;
+module.exports = _.bindAll(ComponentStore);

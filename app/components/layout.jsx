@@ -20,7 +20,7 @@ module.exports = React.createClass({
                         <ReactLogo />
                         <h1>{config['page-title']}</h1>
 
-                        <SearchInput query={this.props.query || ''} />
+                        <SearchInput query={this.props.query || ''} autoFocus={this.props.autoFocusSearch} />
                     </Container>
                 </header>
 

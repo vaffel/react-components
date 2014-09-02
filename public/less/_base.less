@@ -8,7 +8,7 @@ html, body {
 body {
     background: @react-light;
     color: @react-text;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: @page-sans-serif-fonts;
 }
 
 a {
@@ -18,6 +18,13 @@ a {
     &:hover {
         text-decoration: underline;
     }
+}
+
+code {
+    background: @react-code-bg;
+    color: @react-code-text;
+    padding: 0.25em;
+    margin: 0 0.25em;
 }
 
 .container {

@@ -4,11 +4,11 @@ var _  = require('lodash');
 var Reflux = require('reflux');
 var ApiActions = require('app/actions/api');
 var request = require('xhr');
-var isFetching = false;
+var isFetchingList = false;
 
 var ComponentsApi = {
     fetchComponents: function() {
-        isFetching = true;
+        isFetchingList = true;
 
         request({ url: '/api/components', json: true }, function(err, xhr, body) {
             if (err) {
@@ -18,17 +18,28 @@ var ComponentsApi = {
             var assignKey  = _.partial(_.zipObject, body.keys),
                 components = _.map(body.items, assignKey);
 
-            isFetching = false;
+            isFetchingList = false;
             ApiActions.componentsFetched(components);
+        });
+    },
+
+    fetchComponentInfo: function(name) {
+        request({ url: '/api/components/' + encodeURIComponent(name), json: true }, function(err, xhr, body) {
+            if (err) {
+                return ApiActions.fetchComponentFailed(err);
+            }
+
+            ApiActions.componentFetched(body);
         });
     },
 
     listen: function() {
         ApiActions.fetchComponents.shouldEmit = function() {
-            return !isFetching;
+            return !isFetchingList;
         };
 
         ApiActions.fetchComponents.listen(ComponentsApi.fetchComponents);
+        ApiActions.fetchComponentInfo.listen(ComponentsApi.fetchComponentInfo);
     }
 };
 

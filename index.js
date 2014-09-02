@@ -2,6 +2,14 @@
 
 require('node-jsx').install({ extension: '.jsx' });
 
+// Process seem to fail every once in a while when DNS fails
+// I know this is evil, but until we can track down which
+// request is actually failing, I'll add this as a debug step
+process.on('uncaughtException', function (e) {
+    console.error('======= UNCAUGHT EXCEPTION ========')
+    console.error(e);
+});
+
 var _       = require('lodash');
 var config  = require('app/config');
 var Hapi    = require('hapi');
@@ -18,10 +26,14 @@ var params = {
         title: 'React Components'
     },
     'resources': {
-        css: '/css/components.css',
+        css: [
+            '/css/codemirror.css',
+            '/css/components.css'
+        ],
         js: [
+            '/js/codemirror-compressed.js',
             '/dist/vendor.bundle' + min + '.js',
-            '/dist/bundle' + min + '.js'
+            '/dist/bundle' + min + '.js',
         ]
     }
 };
@@ -84,6 +96,12 @@ server.route({
 
 server.route({
     method: 'GET',
+    path: '/component/{component}',
+    handler: handleRequest
+});
+
+server.route({
+    method: 'GET',
     path: '/api/components',
     config: {
         handler: controllers.components.componentsList,
@@ -95,8 +113,7 @@ server.route({
     method: 'GET',
     path: '/api/components/{component}',
     config: {
-        handler: controllers.components.componentInfo,
-        cache: { expiresIn: config['poll-interval'], privacy: 'public' }
+        handler: controllers.components.componentInfo
     }
 });
 

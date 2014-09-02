@@ -5,7 +5,7 @@ module.exports = {
     cache: true,
     entry: {
         bundle: './app/root',
-        vendor: ['react/addons', 'lodash', 'lunr', 'moment', 'reflux', 'xhr'],
+        vendor: ['react/addons', 'lodash', 'lunr', 'moment', 'reflux', 'xhr', 'marked'],
     },
     output: {
         path: path.join(__dirname, 'public', 'dist'),

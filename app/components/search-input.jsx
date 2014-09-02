@@ -32,8 +32,8 @@ module.exports = React.createClass({
         // Use to bring up the "looking glass"-icon
         this.getDOMNode().setAttribute('results', 5);
 
-        // Focus the END of the input (if it has a value)
-        if (this.props.query) {
+        // Focus the END of the input (if it has a value and autofocus is set to true)
+        if (this.props.query && this.props.autoFocus) {
             this.moveCaretToEnd();
         }
     },

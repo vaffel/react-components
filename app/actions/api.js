@@ -5,5 +5,9 @@ var Reflux = require('reflux');
 module.exports = Reflux.createActions([
     'fetchComponents',
     'fetchFailed',
-    'componentsFetched'
+    'componentsFetched',
+
+    'fetchComponentInfo',
+    'fetchComponentFailed',
+    'componentFetched'
 ]);
