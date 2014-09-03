@@ -6,7 +6,6 @@ var _       = require('lodash');
 var config  = require('app/config');
 var Hapi    = require('hapi');
 var isDev   = process.env.NODE_ENV === 'development';
-var min     = isDev ? '' : '.min';
 var server  = new Hapi.Server(process.env.REACT_COMPONENTS_PORT || 3000);
 var render  = require('app/react/renderer');
 var pkgInfo = require('./package.json');
@@ -26,8 +25,8 @@ var params = {
         js: [
             '/js/codemirror-compressed.js',
             '/js/analytics.js',
-            '/dist/vendor.bundle' + min + '.js',
-            '/dist/bundle' + min + '.js',
+            '/dist/vendor.bundle.js',
+            '/dist/bundle.js',
         ]
     }
 };
