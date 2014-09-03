@@ -46,7 +46,7 @@ var GithubApi = {
                 starCount: (data || {}).stargazers_count || 0
             };
 
-            cache.set(moduleName, starCount)
+            cache.set(moduleName, starCount);
             callback(err, starCount);
         });
     },
