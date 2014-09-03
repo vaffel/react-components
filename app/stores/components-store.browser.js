@@ -22,6 +22,10 @@ var ComponentStore = Reflux.createStore({
         ApiActions.fetchComponentInfo(name);
     },
 
+    getSummary: function(name) {
+        return _.find(this.componentSummaries, { name: name });
+    },
+
     getAll: function() {
         return this.components;
     },
