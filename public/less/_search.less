@@ -38,4 +38,32 @@
         text-align: center;
         font-size: 1.35em;
     }
+
+    .component-meta {
+        display: none;
+    }
+
+    @media only screen and (max-width: 500px) {
+        th, td {
+            display: none;
+        }
+
+        th:first-child, td:first-child {
+            display: table-cell;
+            padding: 0;
+        }
+
+        .component-meta {
+            display: block;
+
+            dt {
+                display: inline-block;
+            }
+
+            dd {
+                display: inline-block;
+                margin: 0 10px 0 5px;
+            }
+        }
+    }
 }

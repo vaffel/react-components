@@ -1,1 +1,1349 @@
-webpackJsonp([1],[function(t,e,n){"use strict";var r=n(17),o=n(65),i=n(20),s=n(41),a="undefined"!=typeof window,u=n(58),c=n(34),l=n(104),p=n(39),f=n(60);s.setRoutes(n(119));var h=o.createClass({displayName:"App",mixins:[i.ListenerMixin],propTypes:{path:o.PropTypes.string.isRequired},getInitialState:function(){return{path:!1}},componentDidMount:function(){window.addEventListener("popstate",this.onLocationChanged,!1),this.listenTo(u.locationChange,this.onLocationChanged)},componentWillUnmount:function(){window.removeEventListener("popstate",this.onLocationChanged,!1)},onLocationChanged:function(){this.setState({path:window.location.pathname+window.location.search})},render:function(){var t=s.match(this.state.path||this.props.path);return t?new t.page(r.merge({},this.state,{query:t.query||{},route:t.route||{}})):(console.error("Could not match URL ("+this.props.path+")"),null)}});l.listen(),f.listen(),a&&(window.React=o,p.fetchComponents(),c.listen(function(){o.renderComponent(new h({path:window.location.pathname+window.location.search}),document.getElementById("root"))})),t.exports=h},,function(t,e,n){t.exports=n(24)},,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,function(t,e){(function(e){t.exports={"page-title":"React Components","npm-keyword":"react-component","poll-interval":3e5,"exclude-keywords":["react","react-component"],"codemirror-modes":{cs:"coffeescript",coffeescript:"coffeescript",coffee:"coffeescript",css:"css",html:"htmlmixed",javascript:"javscript",js:"javascript",php:"php",ruby:"ruby",rb:"rb",shell:"shell",sh:"shell",bash:"shell",batch:"shell",yaml:"yaml"},github:{type:"oauth",key:{NODE_ENV:"production"}.GITHUB_KEY,secret:{NODE_ENV:"production"}.GITHUB_SECRET},cache:{starCounts:e+"/../data/starCounts.json"}}}).call(e,"/")},function(t,e,n){"use strict";var r=n(17),o=n(64),i=n(20),s=n(39),a=i.createStore({init:function(){this.components={},this.componentSummaries=[],this.listenTo(s.componentsFetched,this.populate),this.listenTo(s.componentFetched,this.addComponentInfo)},get:function(t){return this.components[t]?this.components[t]:void s.fetchComponentInfo(t)},getAll:function(){return this.components},getSummaries:function(){return this.componentSummaries},getMostRecentlyCreated:function(t){return r.sortBy(this.componentSummaries,"created").reverse().slice(0,t||10)},getMostRecentlyUpdated:function(t){var e=this.getMostRecentlyCreated(),n=r.sortBy(this.componentSummaries,"modified").reverse();return r.without.apply(null,[n].concat(e)).slice(0,t||10)},populate:function(t){t.map(this.addComponent),this.trigger("change")},parseComponent:function(t){return t.modified=o.utc(t.modified),t.created=o.utc(t.created),t},addComponent:function(t){t=this.parseComponent(t),this.componentSummaries.push(t)},addComponentInfo:function(t){this.components[t.name]=t,this.trigger("change")}});t.exports=r.bindAll(a)},,,,,function(t,e,n){"use strict";var r=n(20);t.exports=r.createActions(["fetchComponents","fetchFailed","componentsFetched","fetchComponentInfo","fetchComponentFailed","componentFetched"])},function(t,e,n){"use strict";var r=n(2),o=n(33),i=n(108),s=n(107),a=n(112),u=n(115);t.exports=r.createClass({displayName:"Layout",render:function(){return r.DOM.div(null,r.DOM.header(null,s(null,a(null),r.DOM.h1(null,r.DOM.a({href:"/"},o["page-title"])),u({query:this.props.query||"",autoFocus:this.props.autoFocusSearch}))),r.DOM.main(null,s({className:this.props.className||""},this.props.children)),i(null))}})},function(t,e,n){"use strict";function r(t,e){var n,r=t.match(/(:[a-zA-Z0-9]+)/g),o=new RegExp("^"+t.replace(/(:[a-zA-Z0-9]+)/g,"(.*?)")+"$"),i=e.match(o),s={};if(!i)return null;for(var a=1;a<i.length;a++)n=r[a-1].substring(1),s[n]=decodeURIComponent(i[a]);return s}var o=/(?:^|&)([^&=]*)=?([^&]*)/g,i=n(58),s={},a={setRoutes:function(t){s=t},match:function(t){var e,n,i=t.split("?"),a=i[1]||"",u=i[0],c={};a.replace(o,function(t,e,n){e&&(c[e]=n)});for(e in s)if(n=r(e,u))return{route:n,query:c,page:s[e]};return null},locationChanged:function(){i.locationChange()}};t.exports=a},,,,,,,,,,,,,,,,,function(t,e,n){"use strict";var r=n(20);t.exports=r.createActions(["locationChange"])},function(t,e,n){"use strict";var r=n(2),o=n(33),i=n(41);t.exports=r.createClass({displayName:"ComponentLink",getUrl:function(){return"/component/"+encodeURIComponent(this.props.component.name)},onClick:function(t){if(!(t.altKey||t.ctrlKey||t.metaKey||t.shiftKey||2===t.button)){t.preventDefault();var e=this.props.component.name+" - "+o["page-title"];history.pushState({},e,t.target.href),i.locationChanged()}},render:function(){return r.DOM.a({className:"component-name",href:this.getUrl(),onClick:this.onClick},this.props.children||this.props.component.name)}})},function(t,e,n){"use strict";function r(){return i(function(){this.field("name",{boost:10}),this.field("keywords",{boost:5}),this.field("description")})}var o=n(17),i=n(62),s=n(34),a=r(),u={listen:function(){s.listen(this.onComponentsChanged)},onComponentsChanged:function(){var t=s.getSummaries();a=r(),t.map(this.indexComponent)},indexComponent:function(t,e){a.add({id:e,name:t.name,keywords:t.keywords.join(" "),description:t.description})},filter:function(t){var e=s.getSummaries();return a.search(t).map(function(t){return o.merge(e[t.ref],t)})}};t.exports=o.bindAll(u)},function(t){"use strict";var e=/github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;t.exports=function(t){for(var n,r=(t.repository||{}).url,o=t.homepage,i=(t.bugs||{}).url,s=[r,o,i].filter(Boolean),a=s.length;a--;)if(n=s[a].match(e),n[1])return n[1];return!1}},,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,function(t,e,n){"use strict";var r=n(17),o=n(39),i=n(103),s=!1,a={fetchComponents:function(){s=!0,i({url:"/api/components",json:!0},function(t,e,n){if(t)return o.fetchFailed(t);var i=r.partial(r.zipObject,n.keys),a=r.map(n.items,i);s=!1,o.componentsFetched(a)})},fetchComponentInfo:function(t){i({url:"/api/components/"+encodeURIComponent(t),json:!0},function(t,e,n){return t?o.fetchComponentFailed(t):void o.componentFetched(n)})},listen:function(){o.fetchComponents.shouldEmit=function(){return!s},o.fetchComponents.listen(a.fetchComponents),o.fetchComponentInfo.listen(a.fetchComponentInfo)}};t.exports=a},function(t,e,n){"use strict";var r=n(2),o=n(59);t.exports=r.createClass({displayName:"ComponentItem",propTypes:{component:r.PropTypes.object.isRequired},render:function(){return r.DOM.li(null,o({component:this.props.component}))}})},function(t,e,n){"use strict";var r=n(2),o=n(105);t.exports=r.createClass({displayName:"LatestComponents",propTypes:{components:r.PropTypes.array.isRequired,listName:r.PropTypes.string.isRequired,className:r.PropTypes.string},getDefaultProps:function(){return{className:"component-list"}},getComponentItem:function(t){return new o({key:t.name,component:t})},render:function(){return r.DOM.section({className:this.props.className},r.DOM.h2(null,this.props.listName),r.DOM.ul(null,this.props.components.map(this.getComponentItem)))}})},function(t,e,n){"use strict";var r=n(2);t.exports=r.createClass({displayName:"Container",render:function(){return this.transferPropsTo(r.DOM.div({className:"container"},this.props.children))}})},function(t,e,n){"use strict";var r=n(2);t.exports=r.createClass({displayName:"Footer",render:function(){return r.DOM.footer(null,"Made by ",r.DOM.a({href:"http://vaffel.ninja/"},"VaffelNinja AS"),". ",r.DOM.a({href:"https://github.com/vaffel/react-components"},"Open-source"),".")}})},function(t,e,n){"use strict";var r=n(2);t.exports=r.createClass({displayName:"Loader",render:function(){return r.DOM.div({className:"loader"},r.DOM.div({className:"dot"}),r.DOM.div({className:"dot"}),r.DOM.div({className:"dot"}),r.DOM.div({className:"dot"}),r.DOM.div({className:"dot"}))}})},function(t,e,n){"use strict";var r="undefined"!=typeof window,o=r&&(navigator.userAgent.match(/Android/i)||navigator.userAgent.match(/webOS/i)||navigator.userAgent.match(/iPhone/i)||navigator.userAgent.match(/iPad/i)||navigator.userAgent.match(/iPod/i)||navigator.userAgent.match(/BlackBerry/i)||navigator.userAgent.match(/Windows Phone/i)),i=n(17),s=n(2),a=n(63),u=n(33),c=n(61),l="undefined"==typeof window?function(){}:window.CodeMirror,p={lineNumbers:!1,lineWrapping:!0,smartIndent:!1,matchBrackets:!0,theme:"solarized-light",readOnly:!0};t.exports=s.createClass({displayName:"MarkdownReadme",componentDidMount:function(){if(!o)for(var t,e,n=this.getDOMNode().querySelectorAll("pre > code"),r=0;r<n.length;r++)t=n[r].parentNode,e=n[r].getAttribute("class")||"",e=e.replace(/.*?lang\-(.*)/,"$1").split(/\s+/)[0],l(function(e){t.parentNode.replaceChild(e,t)},i.merge({value:n[r].innerText.trim(),mode:u["codemirror-modes"][e]||"javascript"},p))},fixRelativeUrls:function(t){for(var e,n,r="/blob/"+this.props.component.branch,o=this.getGithubUrl()+r,i=/<a href="(.*?)"/g;e=i.exec(t);)n=e[1],n.match(/^https?:\/\//)||(n=0===n.indexOf("/")?n:"/"+n,t=t.replace(new RegExp('<a href="'+e[1]+'">',"g"),'<a href="'+o+n+'">'));return t},getGithubUrl:function(){var t=c(this.props.component);return t?"https://github.com/"+t:!1},render:function(){var t=this.fixRelativeUrls(a(this.props.component.readme));return s.DOM.section({className:"readme",dangerouslySetInnerHTML:{__html:t}})}})},function(t,e,n){"use strict";var r=n(2);t.exports=r.createClass({displayName:"NoResult",render:function(){return r.DOM.tr(null,r.DOM.td({colSpan:"4",className:"no-result"},"Your search did not return any results, unfortunately."))}})},function(t,e,n){"use strict";var r=n(17),o=n(2);t.exports=o.createClass({displayName:"ReactLogo",render:function(){var t=["react-logo"].concat(this.props.className);return o.DOM.a({href:"/"},o.DOM.img(r.merge({},this.props,{src:"/img/react.svg",className:t.join(" ")})))}})},function(t,e,n){"use strict";var r=n(2),o=n(59);t.exports=r.createClass({displayName:"SearchResultItem",render:function(){return r.DOM.tr(null,r.DOM.td(null,o({component:this.props.component}),r.DOM.p({className:"description"},this.props.component.description)),r.DOM.td(null,this.props.component.author),r.DOM.td(null,this.props.component.stars||0),r.DOM.td(null,this.props.component.modified.fromNow()))}})},function(t,e,n){"use strict";var r=n(2),o=n(113),i=n(111);t.exports=r.createClass({displayName:"SearchResultsTable",getComponentItem:function(t){return new o({key:t.name,component:t})},getSearchResults:function(){return this.props.results.map(this.getComponentItem)},sortByName:function(t){this.sortBy(t,"name")},sortByAuthor:function(t){this.sortBy(t,"author")},sortByStars:function(t){this.sortBy(t,"stars")},sortByUpdated:function(t){this.sortBy(t,"modified")},sortBy:function(t,e){t.preventDefault(),this.props.onSortClicked(e)},render:function(){return r.DOM.table({className:"pure-table pure-table-horizontal results-table"},r.DOM.thead(null,r.DOM.tr(null,r.DOM.th({className:"name"},r.DOM.a({href:"#",tabIndex:"-1",onClick:this.sortByName},"Name")),r.DOM.th({className:"author"},r.DOM.a({href:"#",tabIndex:"-1",onClick:this.sortByAuthor},"Author")),r.DOM.th({className:"stars"},r.DOM.a({href:"#",tabIndex:"-1",onClick:this.sortByStars},"Stars")),r.DOM.th({className:"updated"},r.DOM.a({href:"#",tabIndex:"-1",onClick:this.sortByUpdated},"Updated")))),r.DOM.tbody(null,this.props.results.length?this.getSearchResults():i(null)))}})},function(t,e,n){"use strict";var r=n(2),o=n(33),i=n(41);t.exports=r.createClass({displayName:"SearchInput",propTypes:{autoFocus:r.PropTypes.bool,placeholder:r.PropTypes.string,query:r.PropTypes.string},getDefaultProps:function(){return{autoFocus:!0,placeholder:"Component name, keyword or similar",query:""}},getInitialState:function(){return{query:this.props.query}},componentDidMount:function(){this.getDOMNode().setAttribute("results",5),this.props.query&&this.props.autoFocus&&this.moveCaretToEnd()},getPageTitle:function(t){return(t?t+" - ":"")+o["page-title"]},moveCaretToEnd:function(){var t=this.getDOMNode();if("number"==typeof t.selectionStart)t.selectionStart=t.selectionEnd=t.value.length;else if("undefined"!=typeof t.createTextRange){t.focus();var e=t.createTextRange();e.collapse(!1),e.select()}},onQueryChange:function(t){var e={query:t.target.value},n=e.query?"/search/"+encodeURIComponent(e.query):"/",r=this.getPageTitle(e.query);this.state.query?history.replaceState(e,r,n):history.pushState(e,r,n),i.locationChanged(),window.document.title=r,this.setState(e)},render:function(){return r.DOM.input({type:"search",className:"search",onChange:this.onQueryChange,defaultValue:this.props.query,value:this.state.query,placeholder:this.props.placeholder,autoFocus:this.props.autoFocus})}})},function(t,e,n){"use strict";function r(t){return{componentInfo:c.get(t)}}var o=n(2),i=n(20),s=n(109),a=n(40),u=n(110),c=n(34),l=n(61),p=n(120);t.exports=o.createClass({displayName:"ComponentInfo",mixins:[i.ListenerMixin],getInitialState:function(){return r(this.props.route.componentName)},componentDidMount:function(){this.listenTo(c,this.onComponentInfoChanged)},onComponentInfoChanged:function(){this.setState(r(this.props.route.componentName))},getGithubUrl:function(){var t=l(this.state.componentInfo);return t?"https://github.com/"+t:!1},getHomepageButton:function(){var t=this.getGithubUrl(),e=this.state.componentInfo.homepage||"";return e.match(/https?:\/\//i)&&t!==e?o.DOM.a({href:e,className:"pure-button"},o.DOM.i({className:"fa fa-globe"})," Homepage"):null},getGithubButton:function(){var t=this.getGithubUrl();return t?o.DOM.a({href:t,className:"pure-button"},o.DOM.i({className:"fa fa-github"})," GitHub"):null},getGithubStarsButton:function(){var t=this.getGithubUrl();return t?o.DOM.a({title:"Number of stars on Github",href:t+"/stargazers",className:"pure-button"},o.DOM.i({className:"fa fa-star"})," ",p(this.state.componentInfo.starCount||0)):null},getDownloadsButton:function(){return o.DOM.a({title:"Downloads last week",href:"https://www.npmjs.org/package/"+this.state.componentInfo.name,className:"pure-button"},o.DOM.i({className:"fa fa-arrow-circle-o-down"})," ",p(this.state.componentInfo.downloads||0))},render:function(){return a({className:"component-info",query:this.props.route.componentName,autoFocusSearch:!1},this.state.componentInfo?o.DOM.div(null,o.DOM.aside(null,o.DOM.div({className:"toolbar"},this.getGithubButton(),this.getHomepageButton(),this.getGithubStarsButton(),this.getDownloadsButton())),u({component:this.state.componentInfo})):s(null))}})},function(t,e,n){"use strict";function r(){return{recentlyCreated:u.getMostRecentlyCreated(),recentlyUpdated:u.getMostRecentlyUpdated()}}var o=n(2),i=n(20),s=n(40),a=n(106),u=n(34),c=o.createClass({displayName:"FrontPage",mixins:[i.ListenerMixin],getInitialState:function(){return r()},componentDidMount:function(){this.listenTo(u,this.onComponentsChanged)},onComponentsChanged:function(){this.setState(r)},render:function(){return s({className:"front",query:this.props.route.query},o.DOM.h1(null,"Searchable database of ",o.DOM.a({href:"http://facebook.github.io/react/"},"React")," components"),o.DOM.hr(null),o.DOM.section({className:"faq"},o.DOM.h2(null,"How it works"),o.DOM.p(null,"Every module registered on ",o.DOM.a({href:"https://www.npmjs.org/"},"NPM")," using the keyword ",o.DOM.a({href:"https://www.npmjs.org/browse/keyword/react-component",className:"emphasize"},"react-component")," will show up in the list. It really is that simple."),o.DOM.h2(null,"How do I add my component to the list?"),o.DOM.ol(null,o.DOM.li(null,"Ensure your ",o.DOM.em({className:"emphasize"},"package.json")," file contains an array of keywords which includes ",o.DOM.em({className:"emphasize"},"react-component"),"."),o.DOM.li(null,"Publish your component to NPM (learn how at ",o.DOM.a({href:"https://www.npmjs.org/doc/cli/npm-publish.html"},"npmjs.org"),")."),o.DOM.li(null,"Wait for it to show up! Shouldn't take longer than 10-15 minutes.")),o.DOM.h2(null,"Missing any features?"),o.DOM.p(null,o.DOM.a({href:"https://github.com/vaffel/react-components/issues"},"Let us know"),"! We're always looking for ways to improve."),o.DOM.h2(null,"Who made this? Can I contribute?"),o.DOM.p(null,"Developed and currently hosted by ",o.DOM.a({href:"http://vaffel.ninja/"},"VaffelNinja"),", but it's an open-source, MIT-licensed solution."),o.DOM.p(null,"Contributions are ",o.DOM.a({href:"https://github.com/vaffel/react-components"},"very welcome"),"! Please make sure you read the ",o.DOM.a({href:"https://github.com/vaffel/react-components/blob/master/CONTRIBUTING.md"},"contribution guidelines"),".")),o.DOM.section({className:"component-lists"},a({listName:"Latest components",className:"latest-components",components:this.state.recentlyCreated}),a({listName:"Recently updated",className:"modified-components",components:this.state.recentlyUpdated})))}});t.exports=c},function(t,e,n){"use strict";var r=n(17),o=n(2),i=n(40),s=n(114),a=n(60);t.exports=o.createClass({displayName:"SearchPage",getInitialState:function(){return{sortBy:"score",sortOrder:"asc"}},getSearchResults:function(){var t=a.filter(this.props.route.query),e=r.sortBy(t,this.state.sortBy);return"desc"===this.state.sortOrder?e:e.reverse()},shouldComponentUpdate:function(t,e){return this.props.route.query!==t.route.query||this.state.sortBy!==e.sortBy||this.state.sortOrder!==e.sortOrder},onSortClicked:function(t){var e={sortBy:t};t===this.state.sortBy&&(e.sortOrder="asc"===this.state.sortOrder?"desc":"asc"),this.setState(e)},render:function(){return i({className:"search",query:this.props.route.query},s({onSortClicked:this.onSortClicked,results:this.getSearchResults()}))}})},function(t,e,n){"use strict";var r=n(117),o=n(118),i=n(116);t.exports={"/":r,"/search/:query":o,"/component/:componentName":i}},function(t){"use strict";var e=/\B(?=(?:\d{3})+(?!\d))/g;t.exports=function(t){return 1e3>t?t:1e4>t?(t+"").replace(e," "):1e6>t?Math.floor(t/1e3)+"K":(t/1e6).toFixed(1)+"M"}}]);
+webpackJsonp([1],{
+
+/***/ 0:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var _ = __webpack_require__(1);
+	var React = __webpack_require__(3);
+	var Reflux = __webpack_require__(163);
+	var router = __webpack_require__(170);
+	var isBrowser = typeof window !== 'undefined';
+	
+	var RoutingActions = __webpack_require__(171);
+	var ComponentStore = __webpack_require__(172);
+	var ComponentApi   = __webpack_require__(175);
+	var ApiActions     = __webpack_require__(174);
+	var SearchIndex    = __webpack_require__(183);
+	
+	// We'll want to use react-router when server-side rendering is ready
+	router.setRoutes(__webpack_require__(185));
+	
+	var App = React.createClass({
+	    displayName: 'App',
+	
+	    mixins: [Reflux.ListenerMixin],
+	
+	    propTypes: {
+	        path: React.PropTypes.string.isRequired
+	    },
+	
+	    getInitialState: function() {
+	        return {
+	            path: false
+	        };
+	    },
+	
+	    componentDidMount: function() {
+	        window.addEventListener('popstate', this.onLocationChanged, false);
+	
+	        this.listenTo(RoutingActions.locationChange, this.onLocationChanged);
+	    },
+	
+	    componentWillUnmount: function() {
+	        window.removeEventListener('popstate', this.onLocationChanged, false);
+	    },
+	
+	    onLocationChanged: function() {
+	        this.setState({ path: window.location.pathname + window.location.search });
+	    },
+	
+	    render: function() {
+	        var match = router.match(this.state.path || this.props.path);
+	
+	        if (!match) {
+	            console.error('Could not match URL (' + this.props.path + ')');
+	            return null; // @todo render error-view?
+	        }
+	
+	        return new match.page(_.merge({}, this.state, {
+	            query: match.query || {},
+	            route: match.route || {}
+	        }));
+	    }
+	});
+	
+	// Have the API and search index listen for dispatcher events
+	ComponentApi.listen();
+	SearchIndex.listen();
+	
+	if (isBrowser) {
+	    // Allow React to leak into global namespace - enables devtools etc
+	    window.React = React;
+	
+	    // Fetch components from API
+	    ApiActions.fetchComponents();
+	
+	    // Wait for components list to be ready
+	    ComponentStore.listen(function() {
+	        // Render the app once the components list is ready
+	        // (Normally, we'd just show a "loading"-state, but since
+	        // we're rendering on server side...)
+	        React.renderComponent(new App({
+	            path: window.location.pathname + window.location.search
+	        }), document.getElementById('root'));
+	    });
+	}
+	
+	
+	module.exports = App;
+
+/***/ },
+
+/***/ 170:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var queryParser = /(?:^|&)([^&=]*)=?([^&]*)/g;
+	var RoutingActions = __webpack_require__(171);
+	var map = {};
+	
+	var Router = {
+	    setRoutes: function(routeMap) {
+	        map = routeMap;
+	    },
+	
+	    match: function(url) {
+	        var parts = url.split('?'),
+	            qs    = parts[1] || '',
+	            path  = parts[0],
+	            query = {},
+	            pattern, params;
+	
+	        qs.replace(queryParser, function ($0, $1, $2) {
+	            if ($1) {
+	                query[$1] = $2;
+	            }
+	        });
+	
+	        for (pattern in map) {
+	            params = matchPattern(pattern, path);
+	
+	            if (params) {
+	                return {
+	                    route: params,
+	                    query: query,
+	                    page : map[pattern]
+	                };
+	            }
+	        }
+	
+	        return null;
+	    },
+	
+	    locationChanged: function() {
+	        RoutingActions.locationChange();
+	    }
+	};
+	
+	module.exports = Router;
+	
+	function matchPattern(pattern, url) {
+	    var vars = pattern.match(/(:[a-zA-Z0-9]+)/g),
+	        re = new RegExp('^' + pattern.replace(/(:[a-zA-Z0-9]+)/g, '(.*?)') + '$'),
+	        matches = url.match(re),
+	        params = {},
+	        varname;
+	
+	    if (!matches) {
+	        return null;
+	    }
+	
+	    for (var i = 1; i < matches.length; i++) {
+	        varname = vars[i - 1].substring(1);
+	        params[varname] = decodeURIComponent(matches[i]);
+	    }
+	
+	    return params;
+	}
+
+/***/ },
+
+/***/ 171:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Reflux = __webpack_require__(163);
+	
+	module.exports = Reflux.createActions([
+	    'locationChange'
+	]);
+
+/***/ },
+
+/***/ 172:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _ = __webpack_require__(1);
+	var moment = __webpack_require__(173);
+	var Reflux = __webpack_require__(163);
+	var ApiActions = __webpack_require__(174);
+	
+	var ComponentStore = Reflux.createStore({
+	    init: function() {
+	        this.components = {};
+	        this.componentSummaries = [];
+	
+	        this.listenTo(ApiActions.componentsFetched, this.populate);
+	        this.listenTo(ApiActions.componentFetched, this.addComponentInfo);
+	    },
+	
+	    get: function(name) {
+	        if (this.components[name]) {
+	            return this.components[name];
+	        }
+	
+	        ApiActions.fetchComponentInfo(name);
+	    },
+	
+	    getSummary: function(name) {
+	        return _.find(this.componentSummaries, { name: name });
+	    },
+	
+	    getAll: function() {
+	        return this.components;
+	    },
+	
+	    getSummaries: function() {
+	        return this.componentSummaries;
+	    },
+	
+	    getMostRecentlyCreated: function(limit) {
+	        return (
+	            _.sortBy(this.componentSummaries, 'created')
+	            .reverse()
+	            .slice(0, limit || 10)
+	        );
+	    },
+	
+	    getMostRecentlyUpdated: function(limit) {
+	        var mostRecent  = this.getMostRecentlyCreated();
+	        var lastUpdated = _.sortBy(this.componentSummaries, 'modified').reverse();
+	
+	        return _.without.apply(null, [lastUpdated].concat(mostRecent)).slice(0, limit || 10);
+	    },
+	
+	    populate: function(components) {
+	        components.map(this.addComponent);
+	        this.trigger('change');
+	    },
+	
+	    parseComponent: function(component) {
+	        component.modified = moment.utc(component.modified);
+	        component.created  = moment.utc(component.created);
+	
+	        return component;
+	    },
+	
+	    addComponent: function(component) {
+	        component = this.parseComponent(component);
+	        
+	        this.componentSummaries.push(component);
+	    },
+	
+	    addComponentInfo: function(component) {
+	        this.components[component.name] = component;
+	        this.trigger('change');
+	    }
+	});
+	
+	module.exports = _.bindAll(ComponentStore);
+
+/***/ },
+
+/***/ 174:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Reflux = __webpack_require__(163);
+	
+	module.exports = Reflux.createActions([
+	    'fetchComponents',
+	    'fetchFailed',
+	    'componentsFetched',
+	
+	    'fetchComponentInfo',
+	    'fetchComponentFailed',
+	    'componentFetched'
+	]);
+
+/***/ },
+
+/***/ 175:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _  = __webpack_require__(1);
+	var ApiActions = __webpack_require__(174);
+	var request = __webpack_require__(176);
+	var isFetchingList = false;
+	
+	var ComponentsApi = {
+	    fetchComponents: function() {
+	        isFetchingList = true;
+	
+	        request({ url: '/api/components', json: true }, function(err, xhr, body) {
+	            if (err) {
+	                return ApiActions.fetchFailed(err);
+	            }
+	
+	            var assignKey  = _.partial(_.zipObject, body.keys),
+	                components = _.map(body.items, assignKey);
+	
+	            isFetchingList = false;
+	            ApiActions.componentsFetched(components);
+	        });
+	    },
+	
+	    fetchComponentInfo: function(name) {
+	        request({ url: '/api/components/' + encodeURIComponent(name), json: true }, function(err, xhr, body) {
+	            if (err) {
+	                return ApiActions.fetchComponentFailed(err);
+	            }
+	
+	            ApiActions.componentFetched(body);
+	        });
+	    },
+	
+	    listen: function() {
+	        ApiActions.fetchComponents.shouldEmit = function() {
+	            return !isFetchingList;
+	        };
+	
+	        ApiActions.fetchComponents.listen(ComponentsApi.fetchComponents);
+	        ApiActions.fetchComponentInfo.listen(ComponentsApi.fetchComponentInfo);
+	    }
+	};
+	
+	module.exports = ComponentsApi;
+
+/***/ },
+
+/***/ 183:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var _ = __webpack_require__(1);
+	var lunr = __webpack_require__(184);
+	var ComponentStore = __webpack_require__(172);
+	var index = getNewIndex();
+	
+	function getNewIndex() {
+	    return lunr(function() {
+	        this.field('name', { boost: 10 });
+	        this.field('keywords', { boost: 5 });
+	        this.field('description');
+	    });
+	}
+	
+	var SearchFilter = {
+	    listen: function() {
+	        ComponentStore.listen(this.onComponentsChanged);
+	    },
+	
+	    onComponentsChanged: function() {
+	        var components = ComponentStore.getSummaries();
+	
+	        // Reset search index
+	        index = getNewIndex();
+	
+	        // Add components
+	        components.map(this.indexComponent);
+	    },
+	
+	    indexComponent: function(mod, id) {
+	        index.add({
+	            id: id,
+	            name: mod.name,
+	            keywords: mod.keywords.join(' '),
+	            description: mod.description
+	        });
+	    },
+	
+	    filter: function(query) {
+	        var summaries = ComponentStore.getSummaries();
+	        return index.search(query).map(function(match) {
+	            return _.merge(summaries[match.ref], match);
+	        });
+	    }
+	};
+	
+	module.exports = _.bindAll(SearchFilter);
+
+/***/ },
+
+/***/ 185:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Front  = __webpack_require__(186);
+	var Search = __webpack_require__(197);
+	var ComponentInfo = __webpack_require__(201);
+	
+	module.exports = {
+	    '/': Front,
+	    '/search/:query': Search,
+	    '/component/:componentName': ComponentInfo 
+	};
+
+/***/ },
+
+/***/ 186:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var Reflux = __webpack_require__(163);
+	var Layout = __webpack_require__(188);
+	var ComponentList = __webpack_require__(194);
+	var ComponentStore = __webpack_require__(172);
+	
+	function getStateFromStores() {
+	    return {
+	        recentlyCreated: ComponentStore.getMostRecentlyCreated(),
+	        recentlyUpdated: ComponentStore.getMostRecentlyUpdated()
+	    };
+	}
+	
+	var FrontPage = React.createClass({
+	    displayName: 'FrontPage',
+	
+	    mixins: [Reflux.ListenerMixin],
+	
+	    getInitialState: function() {
+	        return getStateFromStores();
+	    },
+	
+	    componentDidMount: function() {
+	        this.listenTo(ComponentStore, this.onComponentsChanged);
+	    },
+	
+	    onComponentsChanged: function() {
+	        this.setState(getStateFromStores);
+	    },
+	
+	    /* jshint trailing:false, quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            Layout({className: "front", query: this.props.route.query}, 
+	                React.DOM.h1(null, "Searchable database of ", React.DOM.a({href: "http://facebook.github.io/react/"}, "React"), " components"), 
+	                React.DOM.hr(null), 
+	
+	                React.DOM.section({className: "component-lists"}, 
+	                    ComponentList({
+	                        listName: "Latest components", 
+	                        className: "latest-components", 
+	                        components: this.state.recentlyCreated}
+	                    ), 
+	
+	                    ComponentList({
+	                        listName: "Recently updated", 
+	                        className: "modified-components", 
+	                        components: this.state.recentlyUpdated}
+	                    )
+	                ), 
+	                
+	                React.DOM.section({className: "faq"}, 
+	                    React.DOM.h2(null, "How it works"), 
+	                    React.DOM.p(null, 
+	                        "Every module registered on ", React.DOM.a({href: "https://www.npmjs.org/"}, "NPM"), " using the keyword ", React.DOM.a({href: "https://www.npmjs.org/browse/keyword/react-component", className: "emphasize"}, "react-component"), " will show up in the list." + ' ' +
+	                        "It really is that simple."
+	                    ), 
+	
+	                    React.DOM.h2(null, "How do I add my component to the list?"), 
+	                    React.DOM.ol(null, 
+	                        React.DOM.li(null, "Ensure your ", React.DOM.em({className: "emphasize"}, "package.json"), " file contains an array of keywords which includes ", React.DOM.em({className: "emphasize"}, "react-component"), "."), 
+	                        React.DOM.li(null, "Publish your component to NPM (learn how at ", React.DOM.a({href: "https://www.npmjs.org/doc/cli/npm-publish.html"}, "npmjs.org"), ")."), 
+	                        React.DOM.li(null, "Wait for it to show up! Shouldn't take longer than 10-15 minutes.")
+	                    ), 
+	
+	                    React.DOM.h2(null, "Missing any features?"), 
+	                    React.DOM.p(null, React.DOM.a({href: "https://github.com/vaffel/react-components/issues"}, "Let us know"), "! We're always looking for ways to improve."), 
+	
+	                    React.DOM.h2(null, "Who made this? Can I contribute?"), 
+	                    React.DOM.p(null, 
+	                        "Developed and currently hosted by ", React.DOM.a({href: "http://vaffel.ninja/"}, "VaffelNinja"), ", but it's an open-source, MIT-licensed solution." 
+	                    ), 
+	                    React.DOM.p(null, 
+	                        "Contributions are ", React.DOM.a({href: "https://github.com/vaffel/react-components"}, "very welcome"), "!" + ' ' +
+	                        "Please make sure you read the ", React.DOM.a({href: "https://github.com/vaffel/react-components/blob/master/CONTRIBUTING.md"}, "contribution guidelines"), "."
+	                    )
+	                )
+	
+	            )
+	        );
+	    }
+	});
+	
+	module.exports = FrontPage;
+
+/***/ },
+
+/***/ 187:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(7);
+
+
+/***/ },
+
+/***/ 188:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var config = __webpack_require__(189);
+	var Footer = __webpack_require__(190);
+	var Container = __webpack_require__(191);
+	var ReactLogo = __webpack_require__(192);
+	var SearchInput = __webpack_require__(193);
+	
+	module.exports = React.createClass({
+	    displayName: 'Layout',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.div(null, 
+	                React.DOM.header(null, 
+	                    Container(null, 
+	                        ReactLogo(null), 
+	                        React.DOM.h1(null, React.DOM.a({href: "/"}, config['page-title'])), 
+	
+	                        SearchInput({query: this.props.query || '', autoFocus: this.props.autoFocusSearch})
+	                    )
+	                ), 
+	
+	                React.DOM.main(null, 
+	                    Container({className: this.props.className || ''}, 
+	                        this.props.children
+	                    )
+	                ), 
+	
+	                Footer(null)
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 189:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process, __dirname) {module.exports = {
+	    'page-title': 'React Components',
+	    'npm-keyword': 'react-component',
+	    'poll-interval': 300000,
+	    'exclude-keywords': ['react', 'react-component'],
+	    'codemirror-modes': {
+	        'cs': 'coffeescript',
+	        'coffeescript': 'coffeescript',
+	        'coffee': 'coffeescript',
+	        'css': 'css',
+	        'html': 'htmlmixed',
+	        'javascript': 'javscript',
+	        'js': 'javascript',
+	        'php': 'php',
+	        'ruby': 'ruby',
+	        'rb': 'rb',
+	        'shell': 'shell',
+	        'sh': 'shell',
+	        'bash': 'shell',
+	        'batch': 'shell',
+	        'yaml': 'yaml'
+	    },
+	    'github': {
+	        'type': 'oauth',
+	        'key': process.env.GITHUB_KEY,
+	        'secret': process.env.GITHUB_SECRET
+	    },
+	    'cache': {
+	        'starCounts': __dirname + '/../data/starCounts.json'
+	    }
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), "/"))
+
+/***/ },
+
+/***/ 190:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'Footer',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.footer(null, 
+	                "Made by ", React.DOM.a({href: "http://vaffel.ninja/"}, "VaffelNinja AS"), ". ", React.DOM.a({href: "https://github.com/vaffel/react-components"}, "Open-source"), "." 
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 191:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'Container',
+	
+	    /* jshint trailing:false, quotmark:false, newcap:false */
+	    render: function() {
+	        return this.transferPropsTo(
+	            React.DOM.div({className: "container"}, this.props.children)
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 192:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _ = __webpack_require__(1);
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'ReactLogo',
+	
+	    /* jshint trailing:false, quotmark:false, newcap:false */
+	    render: function() {
+	        var classNames = ['react-logo'].concat(this.props.className);
+	
+	        return React.DOM.a({ href: '/' },
+	            React.DOM.img(_.merge({}, this.props, {
+	                src: '/img/react.svg',
+	                className: classNames.join(' ')
+	            })
+	        ));
+	    }
+	});
+
+/***/ },
+
+/***/ 193:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React  = __webpack_require__(187);
+	var config = __webpack_require__(189);
+	var router = __webpack_require__(170);
+	
+	module.exports = React.createClass({
+	    displayName: 'SearchInput',
+	
+	    propTypes: {
+	        autoFocus: React.PropTypes.bool,
+	        placeholder: React.PropTypes.string,
+	        query: React.PropTypes.string
+	    },
+	
+	    getDefaultProps: function() {
+	        return {
+	            autoFocus: true,
+	            placeholder: 'Component name, keyword or similar',
+	            query: ''
+	        };
+	    },
+	
+	    getInitialState: function() {
+	        return {
+	            query: this.props.query
+	        };
+	    },
+	
+	    componentDidMount: function() {
+	        // Use to bring up the "looking glass"-icon
+	        this.getDOMNode().setAttribute('results', 5);
+	
+	        // Focus the END of the input (if it has a value and autofocus is set to true)
+	        if (this.props.query && this.props.autoFocus) {
+	            this.moveCaretToEnd();
+	        }
+	    },
+	
+	    getPageTitle: function(query) {
+	        return (query ? (query + ' - ') : '') + config['page-title'];
+	    },
+	
+	    moveCaretToEnd: function() {
+	        var el = this.getDOMNode();
+	        if (typeof el.selectionStart === 'number') {
+	            el.selectionStart = el.selectionEnd = el.value.length;
+	        } else if (typeof el.createTextRange !== 'undefined') {
+	            el.focus();
+	            var range = el.createTextRange();
+	            range.collapse(false);
+	            range.select();
+	        }
+	    },
+	
+	    onQueryChange: function(e) {
+	        var state = { query: e.target.value },
+	            url   = state.query ? '/search/' + encodeURIComponent(state.query) : '/',
+	            title = this.getPageTitle(state.query);
+	
+	        if (this.state.query) {
+	            history.replaceState(state, title, url);
+	        } else {
+	            history.pushState(state, title, url);
+	        }
+	
+	        router.locationChanged();
+	
+	        window.document.title = title;
+	        this.setState(state);
+	    },
+	
+	    /* jshint trailing:false, quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.input({
+	                type: "search", 
+	                className: "search", 
+	                onChange: this.onQueryChange, 
+	                defaultValue: this.props.query, 
+	                value: this.state.query, 
+	                placeholder: this.props.placeholder, 
+	                autoFocus: this.props.autoFocus}
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 194:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var ComponentItem = __webpack_require__(195);
+	
+	module.exports = React.createClass({
+	    displayName: 'LatestComponents',
+	
+	    propTypes: {
+	        components: React.PropTypes.array.isRequired,
+	        listName:   React.PropTypes.string.isRequired,
+	        className:  React.PropTypes.string
+	    },
+	
+	    getDefaultProps: function() {
+	        return {
+	            className: 'component-list'
+	        };
+	    },
+	
+	    getComponentItem: function(c) {
+	        return new ComponentItem({
+	            key: c.name,
+	            component: c
+	        });
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.section({className: this.props.className}, 
+	                React.DOM.h2(null, this.props.listName), 
+	
+	                React.DOM.ul(null, 
+	                    this.props.components.map(this.getComponentItem)
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 195:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var ComponentLink = __webpack_require__(196);
+	
+	module.exports = React.createClass({
+	    displayName: 'ComponentItem',
+	
+	    propTypes: {
+	        component: React.PropTypes.object.isRequired
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.li(null, 
+	                ComponentLink({component: this.props.component})
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 196:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React  = __webpack_require__(187);
+	var config = __webpack_require__(189);
+	var router = __webpack_require__(170);
+	
+	module.exports = React.createClass({
+	    displayName: 'ComponentLink',
+	
+	    getUrl: function() {
+	        return '/component/' + encodeURIComponent(this.props.component.name);
+	    },
+	
+	    onClick: function(e) {
+	        // If trying to open a new window, fall back
+	        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.button === 2) {
+	            return;
+	        }
+	
+	        e.preventDefault();
+	
+	        var pageTitle = this.props.component.name + ' - ' + config['page-title'];
+	        history.pushState({}, pageTitle, e.target.href);
+	        router.locationChanged();
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.a({className: "component-name", href: this.getUrl(), onClick: this.onClick}, 
+	                this.props.children ||  this.props.component.name
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 197:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var _ = __webpack_require__(1);
+	var React  = __webpack_require__(187);
+	var Layout = __webpack_require__(188);
+	var ResultsTable = __webpack_require__(198);
+	var SearchFilter = __webpack_require__(183);
+	
+	module.exports = React.createClass({
+	    displayName: 'SearchPage',
+	
+	    getInitialState: function() {
+	        return {
+	            sortBy: 'score',
+	            sortOrder: 'asc'
+	        };
+	    },
+	
+	    getSearchResults: function() {
+	        var results = SearchFilter.filter(this.props.route.query),
+	            sorted  = _.sortBy(results, this.state.sortBy);
+	
+	        return this.state.sortOrder === 'desc' ? sorted : sorted.reverse();
+	    },
+	
+	    shouldComponentUpdate: function(nextProps, nextState) {
+	        return (
+	            this.props.route.query !== nextProps.route.query ||
+	            this.state.sortBy      !== nextState.sortBy      ||
+	            this.state.sortOrder   !== nextState.sortOrder
+	        );
+	    },
+	
+	    onSortClicked: function(sortBy) {
+	        var state = { sortBy: sortBy };
+	        if (sortBy === this.state.sortBy) {
+	            state.sortOrder = this.state.sortOrder === 'asc' ? 'desc' : 'asc';
+	        }
+	
+	        this.setState(state);
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            Layout({className: "search", query: this.props.route.query}, 
+	                ResultsTable({onSortClicked: this.onSortClicked, results: this.getSearchResults()})
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 198:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var SearchResult = __webpack_require__(199);
+	var NoResult = __webpack_require__(200);
+	
+	module.exports = React.createClass({
+	    displayName: 'SearchResultsTable',
+	
+	    getComponentItem: function(item) {
+	        return new SearchResult({
+	            key: item.name,
+	            component: item
+	        });
+	    },
+	
+	    getSearchResults: function() {
+	        return this.props.results.map(this.getComponentItem);
+	    },
+	
+	    sortByName: function(e) {
+	        this.sortBy(e, 'name');
+	    },
+	
+	    sortByAuthor: function(e) {
+	        this.sortBy(e, 'author');
+	    },
+	
+	    sortByStars: function(e) {
+	        this.sortBy(e, 'stars');
+	    },
+	
+	    sortByUpdated: function(e) {
+	        this.sortBy(e, 'modified');
+	    },
+	
+	    sortBy: function(e, by) {
+	        e.preventDefault();
+	        this.props.onSortClicked(by);
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.table({className: "pure-table pure-table-horizontal results-table"}, 
+	                React.DOM.thead(null, 
+	                    React.DOM.tr(null, 
+	                        React.DOM.th({className: "name"}, React.DOM.a({href: "#", tabIndex: "-1", onClick: this.sortByName}, "Name")), 
+	                        React.DOM.th({className: "author"}, React.DOM.a({href: "#", tabIndex: "-1", onClick: this.sortByAuthor}, "Author")), 
+	                        React.DOM.th({className: "stars"}, React.DOM.a({href: "#", tabIndex: "-1", onClick: this.sortByStars}, "Stars")), 
+	                        React.DOM.th({className: "updated"}, React.DOM.a({href: "#", tabIndex: "-1", onClick: this.sortByUpdated}, "Updated"))
+	                    )
+	                ), 
+	                React.DOM.tbody(null, 
+	                     this.props.results.length ?
+	                        this.getSearchResults() : 
+	                        NoResult(null)
+	                    
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 199:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	var ComponentLink = __webpack_require__(196);
+	
+	module.exports = React.createClass({
+	    displayName: 'SearchResultItem',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.tr(null, 
+	                React.DOM.td(null, 
+	                    ComponentLink({component: this.props.component}), 
+	                    React.DOM.p({className: "description"}, this.props.component.description), 
+	
+	                    React.DOM.dl({className: "component-meta"}, 
+	                        React.DOM.dt(null, React.DOM.i({className: "fa fa-star-o", title: "Stars"})), 
+	                        React.DOM.dd(null, this.props.component.stars || 0), 
+	
+	                        React.DOM.dt(null, React.DOM.i({className: "fa fa-calendar", title: "Modified"})), 
+	                        React.DOM.dd(null, this.props.component.modified.fromNow()), 
+	
+	                        React.DOM.dt(null, React.DOM.i({className: "fa fa-user", title: "Author"})), 
+	                        React.DOM.dd(null, this.props.component.author)
+	                    )
+	                ), 
+	                React.DOM.td(null, this.props.component.author), 
+	                React.DOM.td(null, this.props.component.stars || 0), 
+	                React.DOM.td(null, this.props.component.modified.fromNow())
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 200:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'NoResult',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.tr(null, 
+	                React.DOM.td({colSpan: "4", className: "no-result"}, 
+	                    "Your search did not return any results, unfortunately."
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 201:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React  = __webpack_require__(187);
+	var Reflux = __webpack_require__(163);
+	var Loader = __webpack_require__(203);
+	var Layout = __webpack_require__(188);
+	var MarkdownReadme = __webpack_require__(204);
+	var ComponentStore = __webpack_require__(172);
+	var getGithubAccount = __webpack_require__(205);
+	var numFormat = __webpack_require__(206);
+	
+	function getStateFromStores(name) {
+	    return {
+	        componentInfo: ComponentStore.get(name),
+	        componentSummary: ComponentStore.getSummary(name)
+	    };
+	}
+	
+	module.exports = React.createClass({
+	    displayName: 'ComponentInfo',
+	
+	    mixins: [Reflux.ListenerMixin],
+	
+	    getInitialState: function() {
+	        return getStateFromStores(this.props.route.componentName);
+	    },
+	
+	    componentDidMount: function() {
+	        this.listenTo(ComponentStore, this.onComponentInfoChanged);
+	    },
+	
+	    onComponentInfoChanged: function() {
+	        this.setState(getStateFromStores(this.props.route.componentName));
+	    },
+	
+	    getGithubUrl: function() {
+	        var account = getGithubAccount(this.state.componentInfo);
+	        if (!account) {
+	            return false;
+	        }
+	
+	        return 'https://github.com/' + account;
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    getHomepageButton: function() {
+	        var githubUrl = this.getGithubUrl();
+	        var homePageUrl = this.state.componentInfo.homepage || '';
+	
+	        if (homePageUrl.match(/https?:\/\//i) && githubUrl !== homePageUrl) {
+	            return (
+	                React.DOM.a({href: homePageUrl, className: "pure-button"}, 
+	                    React.DOM.i({className: "fa fa-globe"}), " Homepage"
+	                )
+	            );
+	        }
+	
+	        return null;
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    getGithubButton: function() {
+	        var githubUrl = this.getGithubUrl();
+	        if (!githubUrl) {
+	            return null;
+	        }
+	        
+	        return (
+	            React.DOM.a({href: githubUrl, className: "pure-button"}, 
+	                React.DOM.i({className: "fa fa-github"}), " GitHub"
+	            )
+	        );
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    getGithubStarsButton: function() {
+	        var githubUrl = this.getGithubUrl();
+	
+	        if (!githubUrl) {
+	            return null;
+	        }
+	
+	        return (
+	            React.DOM.a({title: "Number of stars on Github", href: githubUrl + '/stargazers', className: "pure-button"}, 
+	                React.DOM.i({className: "fa fa-star"}), " ",  numFormat(this.state.componentSummary.stars || 0) 
+	            )
+	        );
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    getDownloadsButton: function() {
+	        return (
+	            React.DOM.a({title: "Downloads last week", href: "https://www.npmjs.org/package/" + this.state.componentInfo.name, className: "pure-button"}, 
+	                React.DOM.i({className: "fa fa-arrow-circle-o-down"}), " ",  numFormat(this.state.componentSummary.downloads || 0) 
+	            )
+	        );
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            Layout({className: "component-info", query: this.props.route.componentName, autoFocusSearch: false}, 
+	                
+	                    this.state.componentInfo ? 
+	                    React.DOM.div(null, 
+	                        React.DOM.aside(null, 
+	                        React.DOM.div({className: "toolbar"}, 
+	                            this.getGithubButton(), 
+	                            this.getHomepageButton(), 
+	                            this.getGithubStarsButton(), 
+	                            this.getDownloadsButton()
+	                        )
+	                        ), 
+	                        MarkdownReadme({component: this.state.componentInfo})
+	                    ) :
+	                    Loader(null)
+	                
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 203:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	
+	var React = __webpack_require__(187);
+	
+	module.exports = React.createClass({
+	    displayName: 'Loader',
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        return (
+	            React.DOM.div({className: "loader"}, 
+	                React.DOM.div({className: "dot"}), 
+	                React.DOM.div({className: "dot"}), 
+	                React.DOM.div({className: "dot"}), 
+	                React.DOM.div({className: "dot"}), 
+	                React.DOM.div({className: "dot"})
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 204:
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+	'use strict';
+	var _ = __webpack_require__(1);
+	var React = __webpack_require__(187);
+	var marked = __webpack_require__(202);
+	var config = __webpack_require__(189);
+	var getGithubAccount = __webpack_require__(205);
+	var codeMirror = typeof window === 'undefined' ? function() {} : window.CodeMirror;
+	
+	var mirrorOptions = {
+	    lineNumbers: false,
+	    lineWrapping: true,
+	    smartIndent: false,
+	    matchBrackets: true,
+	    theme: 'solarized-light',
+	    readOnly: true
+	};
+	
+	module.exports = React.createClass({
+	    displayName: 'MarkdownReadme',
+	
+	    componentDidMount: function() {
+	        // Apply CodeMirror to multi-line code elements
+	        var codeEls = this.getDOMNode().querySelectorAll('pre > code'), preEl, lang;
+	        for (var i = 0; i < codeEls.length; i++) {
+	            preEl = codeEls[i].parentNode;
+	            lang  = (codeEls[i].getAttribute('class') || '');
+	            lang  = lang.replace(/.*?lang\-(.*)/, '$1').split(/\s+/)[0];
+	
+	            codeMirror(function(elt) {
+	                preEl.parentNode.replaceChild(elt, preEl);
+	            }, _.merge({
+	                value: codeEls[i].innerText.trim(),
+	                mode: config['codemirror-modes'][lang] || 'javascript'
+	            }, mirrorOptions));
+	        }
+	    },
+	
+	    fixRelativeUrls: function(html) {
+	        var branch = '/blob/' + this.props.component.branch;
+	        var githubUrl = this.getGithubUrl() + branch, matches;
+	        var matcher = /<a href="(.*?)"/g, file;
+	
+	        while (matches = matcher.exec(html)) {
+	            file = matches[1];
+	            if (file.match(/^https?:\/\//)) {
+	                continue;
+	            }
+	
+	            file = file.indexOf('/') === 0 ? file : ('/' + file);
+	            html = html.replace(
+	                new RegExp('<a href="' + matches[1] + '">', 'g'),
+	                '<a href="' + githubUrl + file + '">'
+	            );
+	        }
+	
+	        return html;
+	    },
+	
+	    getGithubUrl: function() {
+	        var account = getGithubAccount(this.props.component);
+	        if (!account) {
+	            return false;
+	        }
+	
+	        return 'https://github.com/' + account;
+	    },
+	
+	    /* jshint quotmark:false, newcap:false */
+	    render: function() {
+	        var html = this.fixRelativeUrls(marked(this.props.component.readme));
+	        return (
+	            React.DOM.section({
+	                className: "readme", 
+	                dangerouslySetInnerHTML: { __html: html}}
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+
+/***/ 205:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var GithubRegex = /github\.com[\/:](.*?\/.*?)(\?|\/|\.git$)/i;
+	
+	module.exports = function(info) {
+	    var repo  = (info.repository || {}).url,
+	        page  = info.homepage,
+	        bugs  = (info.bugs || {}).url,
+	        parts = [repo, page, bugs].filter(Boolean);
+	
+	    var i = parts.length, matches;
+	    while (i--) {
+	        matches = parts[i].match(GithubRegex);
+	        if (matches[1]) {
+	            return matches[1];
+	        }
+	    }
+	
+	    return false;
+	};
+
+/***/ },
+
+/***/ 206:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var sepThousands = /\B(?=(?:\d{3})+(?!\d))/g;
+	
+	module.exports = function(num) {
+	    if (num < 1000) {
+	        return num;
+	    }
+	
+	    if (num < 10000) {
+	        return (num + '').replace(sepThousands, ' ');
+	    }
+	
+	    if (num < 1000000) {
+	        return Math.floor(num / 1000) + 'K';
+	    }
+	
+	    return (num / 1000000).toFixed(1) + 'M';
+	};
+
+/***/ }
+
+});
+//# sourceMappingURL=bundle.js.map

@@ -7,6 +7,19 @@ input.search {
 
 header {
     input.search {
-        width: @search-input-header-width;
+
+        @media only screen and (min-width: @search-input-header-width) {
+            width: @search-input-header-width;
+        }
+
+        @media only screen and (max-width: @search-input-header-width) {
+            width: 100%;
+        }
+
+        @media only screen and (max-width: 812px) {
+            width: 85%;
+            display: block;
+            margin: 0 auto;
+        }
     }
 }

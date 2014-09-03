@@ -7,6 +7,12 @@ header {
     min-height: @header-logo-size;
     font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+    @media only screen and (max-width: 400px) {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        min-height: 160px;
+    }
+
     h1, h2, h3, a {
         color: @react-blue;
     }
@@ -20,6 +26,15 @@ header {
         font-weight: normal;
         margin: 0.1em 0;
         padding-top: 0.3em;
+
+        @media only screen and (max-width: 620px) {
+            font-size: 100px / 2;
+        }
+
+        @media only screen and (max-width: 555px) {
+            font-size: 100px / 3;
+            margin-top: -5px;
+        }
     }
 
     .react-logo {
@@ -27,6 +42,12 @@ header {
         height: @header-logo-size;
         float: left;
         margin-right: @header-logo-size / 8;
+
+        @media only screen and (max-width: 555px) {
+            width: 100px;
+            height: 100px;
+            margin-left: 5px;
+        }
     }
 
     .container:before, .container:after {
