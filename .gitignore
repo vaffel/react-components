@@ -27,3 +27,7 @@ data
 # Dist build
 public/dist
 
+# Ignore gz-files
+public/css/*.gz
+public/js/*.gz
+

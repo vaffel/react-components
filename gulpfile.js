@@ -1,16 +1,18 @@
 'use strict';
 
 var _ = require('lodash');
+var rimraf = require('gulp-rimraf');
 var sourcemaps = require('gulp-sourcemaps');
 var livereload = require('gulp-livereload');
 var webpackConfig = require('./webpack.config');
 var webpack = require('webpack');
+var zopfli = require('gulp-zopfli');
 var gutil = require('gulp-util');
 var less = require('gulp-less');
 var path = require('path');
 var gulp = require('gulp');
 
-gulp.task('default', ['less', 'webpack:build']);
+gulp.task('default', ['less', 'webpack:build', 'clean-compressed']);
 gulp.task('watch', ['serve', 'webpack:build-dev'], function() {
     livereload.listen();
 
@@ -33,12 +35,36 @@ gulp.task('less', function() {
         lessc.end();
     });
 
-    gulp.src('./public/less/components.less')
+    return gulp.src('./public/less/components.less')
         .pipe(sourcemaps.init())
         .pipe(lessc)
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('./public/css'));
 });
+
+gulp.task('clean-compressed', function() {
+    return gulp.src('./public/**/*.gz', { read: false }).pipe(rimraf());
+});
+
+gulp.task('compress-css', function() {
+    return gulp.src('./public/css/*.css')
+        .pipe(zopfli({ zopfliOptions: { numiterations: 1000 } }))
+        .pipe(gulp.dest('./public/css'));
+});
+
+gulp.task('compress-dist', function() {
+    return gulp.src('./public/dist/*.{js,map}')
+        .pipe(zopfli({ zopfliOptions: { numiterations: 1000 } }))
+        .pipe(gulp.dest('./public/dist'));
+});
+
+gulp.task('compress-js', function() {
+    return gulp.src('./public/js/*.js')
+        .pipe(zopfli({ zopfliOptions: { numiterations: 1000 } }))
+        .pipe(gulp.dest('./public/js'));
+});
+
+gulp.task('compress', ['compress-css', 'compress-dist', 'compress-js']);
 
 gulp.task('webpack:build', function(callback) {
     var config = Object.create(webpackConfig);
