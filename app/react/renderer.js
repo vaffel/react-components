@@ -36,7 +36,6 @@ module.exports = function(request, params, template) {
     return isDev ? liveReloadify(request, rendered) : rendered;
 };
 
-/* jshint quotmark: double */
 function liveReloadify(request, rendered) {
     var port    = 35729,
         host    = request.headers.host.replace(/:\d+/, ''),
