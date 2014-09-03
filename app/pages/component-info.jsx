@@ -12,7 +12,8 @@ var numFormat = require('app/util/number-formatter');
 
 function getStateFromStores(name) {
     return {
-        componentInfo: ComponentStore.get(name)
+        componentInfo: ComponentStore.get(name),
+        componentSummary: ComponentStore.getSummary(name)
     };
 }
 
@@ -82,7 +83,7 @@ module.exports = React.createClass({
 
         return (
             <a title="Number of stars on Github" href={githubUrl + '/stargazers'} className="pure-button">
-                <i className="fa fa-star" /> { numFormat(this.state.componentInfo.starCount || 0) }
+                <i className="fa fa-star" /> { numFormat(this.state.componentSummary.stars || 0) }
             </a>
         );
     },
@@ -91,7 +92,7 @@ module.exports = React.createClass({
     getDownloadsButton: function() {
         return (
             <a title="Downloads last week" href={"https://www.npmjs.org/package/" + this.state.componentInfo.name} className="pure-button">
-                <i className="fa fa-arrow-circle-o-down" /> { numFormat(this.state.componentInfo.downloads || 0) }
+                <i className="fa fa-arrow-circle-o-down" /> { numFormat(this.state.componentSummary.downloads || 0) }
             </a>
         );
     },
