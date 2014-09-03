@@ -5,10 +5,11 @@ var fs = require('fs');
 var App = require('app/root');
 var React = require('react/addons');
 var isDev = process.env.NODE_ENV === 'development';
+var crawlerMatcher = /yahoo|msnbot|yandex|googlebot|bing|ask/i;
 var templates = {};
 
 module.exports = function(request, params, template) {
-    var isCrawler = false; // @todo Probably want to render SEO-markup
+    var isCrawler = (request.headers['user-agent'] || '').match(crawlerMatcher);
     var app = new App({ path: request.url.path });
     var body = '';
 
