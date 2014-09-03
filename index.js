@@ -81,6 +81,7 @@ function handleRequest(request, reply) {
     var analyticsSrc = ' http://www.google-analytics.com https://www.google-analytics.com';
 
     reply(render(request, reqParams, tpl('default')))
+        .header('X-UA-Compatible', 'IE=edge,chrome=1')
         .header('Cache-Control', 'public, must-revalidate, max-age=150')
         .header('Content-Security-Policy', [
             'script-src \'self\'' + liveReloadSrc + analyticsSrc,
