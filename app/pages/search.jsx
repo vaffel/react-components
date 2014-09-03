@@ -13,7 +13,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             sortBy: 'score',
-            sortOrder: 'asc'
+            sortOrder: 'desc'
         };
     },
 
@@ -21,7 +21,7 @@ module.exports = React.createClass({
         var results = SearchFilter.filter(this.props.route.query),
             sorted  = _.sortBy(results, this.state.sortBy);
 
-        return this.state.sortOrder === 'desc' ? sorted : sorted.reverse();
+        return this.state.sortOrder === 'desc' ? sorted.reverse() : sorted;
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -34,8 +34,13 @@ module.exports = React.createClass({
 
     onSortClicked: function(sortBy) {
         var state = { sortBy: sortBy };
+        
         if (sortBy === this.state.sortBy) {
+            // Sort by the same prop? Reverse order
             state.sortOrder = this.state.sortOrder === 'asc' ? 'desc' : 'asc';
+        } else if (sortBy === 'stars' || sortBy === 'modified') {
+            // We usually want to see stars and modified dates in descending order 
+            state.sortOrder = 'desc';
         }
 
         this.setState(state);
