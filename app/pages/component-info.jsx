@@ -3,6 +3,7 @@
 
 var React  = require('react');
 var Reflux = require('reflux');
+var config = require('app/config');
 var Loader = require('app/components/loader.jsx');
 var Layout = require('app/components/layout.jsx');
 var MarkdownReadme = require('app/components/markdown-readme.jsx');
@@ -32,6 +33,13 @@ module.exports = React.createClass({
 
     onComponentInfoChanged: function() {
         this.setState(getStateFromStores(this.props.route.componentName));
+
+        window.document.title = this.getPageTitle();
+    },
+
+    getPageTitle: function() {
+        var componentName = this.props.route.componentName;
+        return componentName + ' - ' + config['page-title'];
     },
 
     getGithubUrl: function() {
