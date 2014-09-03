@@ -81,15 +81,13 @@ function handleRequest(request, reply) {
     var liveReloadSrc = isDev ? ' localhost:35729' : '';
     var analyticsSrc = ' http://www.google-analytics.com https://www.google-analytics.com';
 
-    reply(render(
-        request,
-        reqParams,
-        tpl('default')
-    )).header('Content-Security-Policy', [
-        'script-src \'self\'' + liveReloadSrc + analyticsSrc,
-        'frame-src \'none\'',
-        'object-src \'none\''
-    ].join(';'));
+    reply(render(request, reqParams, tpl('default')))
+        .header('Cache-Control', 'public, must-revalidate, max-age=150')
+        .header('Content-Security-Policy', [
+            'script-src \'self\'' + liveReloadSrc + analyticsSrc,
+            'frame-src \'none\'',
+            'object-src \'none\''
+        ].join(';'));
 }
 
 server.route({
