@@ -878,7 +878,7 @@ webpackJsonp([1],{
 	    getInitialState: function() {
 	        return {
 	            sortBy: 'score',
-	            sortOrder: 'asc'
+	            sortOrder: 'desc'
 	        };
 	    },
 	
@@ -886,7 +886,7 @@ webpackJsonp([1],{
 	        var results = SearchFilter.filter(this.props.route.query),
 	            sorted  = _.sortBy(results, this.state.sortBy);
 	
-	        return this.state.sortOrder === 'desc' ? sorted : sorted.reverse();
+	        return this.state.sortOrder === 'desc' ? sorted.reverse() : sorted;
 	    },
 	
 	    shouldComponentUpdate: function(nextProps, nextState) {
@@ -899,8 +899,13 @@ webpackJsonp([1],{
 	
 	    onSortClicked: function(sortBy) {
 	        var state = { sortBy: sortBy };
+	        
 	        if (sortBy === this.state.sortBy) {
+	            // Sort by the same prop? Reverse order
 	            state.sortOrder = this.state.sortOrder === 'asc' ? 'desc' : 'asc';
+	        } else if (sortBy === 'stars' || sortBy === 'modified') {
+	            // We usually want to see stars and modified dates in descending order 
+	            state.sortOrder = 'desc';
 	        }
 	
 	        this.setState(state);
@@ -1062,9 +1067,9 @@ webpackJsonp([1],{
 	
 	var React  = __webpack_require__(187);
 	var Reflux = __webpack_require__(163);
-	var Loader = __webpack_require__(203);
+	var Loader = __webpack_require__(202);
 	var Layout = __webpack_require__(188);
-	var MarkdownReadme = __webpack_require__(204);
+	var MarkdownReadme = __webpack_require__(203);
 	var ComponentStore = __webpack_require__(172);
 	var getGithubAccount = __webpack_require__(205);
 	var numFormat = __webpack_require__(206);
@@ -1182,7 +1187,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 203:
+/***/ 202:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1209,14 +1214,14 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 204:
+/***/ 203:
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
 	'use strict';
 	var _ = __webpack_require__(1);
 	var React = __webpack_require__(187);
-	var marked = __webpack_require__(202);
+	var marked = __webpack_require__(204);
 	var config = __webpack_require__(189);
 	var getGithubAccount = __webpack_require__(205);
 	var codeMirror = typeof window === 'undefined' ? function() {} : window.CodeMirror;
