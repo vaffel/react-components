@@ -55,7 +55,7 @@ module.exports = React.createClass({
     },
 
     onQueryChange: function(e) {
-        var state = { query: e.target.value },
+        var state = { query: e.target.value.replace(/^\s+$/g, '') },
             url   = state.query ? '/search/' + encodeURIComponent(state.query) : '/',
             title = this.getPageTitle(state.query);
 
