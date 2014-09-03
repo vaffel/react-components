@@ -13,6 +13,7 @@ module.exports = React.createClass({
         return React.DOM.a({ href: '/' },
             React.DOM.img(_.merge({}, this.props, {
                 src: '/img/react.svg',
+                alt: '',
                 className: classNames.join(' ')
             })
         ));
