@@ -37,6 +37,20 @@ var FrontPage = React.createClass({
             <Layout className="front" query={this.props.route.query}>
                 <h1>Searchable database of <a href="http://facebook.github.io/react/">React</a> components</h1>
                 <hr />
+
+                <section className="component-lists">
+                    <ComponentList
+                        listName="Latest components"
+                        className="latest-components"
+                        components={this.state.recentlyCreated}
+                    />
+
+                    <ComponentList
+                        listName="Recently updated"
+                        className="modified-components"
+                        components={this.state.recentlyUpdated}
+                    />                    
+                </section>
                 
                 <section className="faq">
                     <h2>How it works</h2>
@@ -63,20 +77,6 @@ var FrontPage = React.createClass({
                         Contributions are <a href="https://github.com/vaffel/react-components">very welcome</a>!
                         Please make sure you read the <a href="https://github.com/vaffel/react-components/blob/master/CONTRIBUTING.md">contribution guidelines</a>.
                     </p>
-                </section>
-
-                <section className="component-lists">
-                    <ComponentList
-                        listName="Latest components"
-                        className="latest-components"
-                        components={this.state.recentlyCreated}
-                    />
-
-                    <ComponentList
-                        listName="Recently updated"
-                        className="modified-components"
-                        components={this.state.recentlyUpdated}
-                    />                    
                 </section>
 
             </Layout>
