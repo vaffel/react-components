@@ -53,7 +53,7 @@ gulp.task('compress-css', function() {
 });
 
 gulp.task('compress-dist', function() {
-    return gulp.src('./public/dist/*.{js,map}')
+    return gulp.src('./public/dist/bundle.js')
         .pipe(zopfli({ zopfliOptions: { numiterations: 1000 } }))
         .pipe(gulp.dest('./public/dist'));
 });
