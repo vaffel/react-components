@@ -1,9 +1,10 @@
 /** @jsx React.DOM */
 'use strict';
 
-var React  = require('react');
-var config = require('app/config');
-var router = require('app/router');
+var React     = require('react');
+var config    = require('app/config');
+var router    = require('app/router');
+var isBrowser = typeof window !== 'undefined';
 
 module.exports = React.createClass({
     displayName: 'ComponentLink',
@@ -23,6 +24,15 @@ module.exports = React.createClass({
         var pageTitle = this.props.component.name + ' - ' + config['page-title'];
         history.pushState({}, pageTitle, e.target.href);
         router.locationChanged();
+
+        if (window.URL && window.ga) {
+            var url = new URL(e.target.href);
+            window.ga('send', {
+                hitType: 'pageview',
+                page:  url.pathname,
+                title: pageTitle
+            });
+        }
     },
 
     /* jshint quotmark:false, newcap:false */
