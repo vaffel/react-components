@@ -3,7 +3,7 @@
 var config        = require('app/config'),
     request       = require('request'),
     JSONStream    = require('JSONStream'),
-    eventStream   = require('event-stream'), 
+    eventStream   = require('event-stream'),
     qs            = require('querystring'),
     ServerActions = require('app/actions/server'),
     GithubApi     = require('app/api/github-api');
@@ -23,7 +23,7 @@ function parseModule(mod) {
 }
 
 var NpmApi = {
-    
+
     getModules: function(callback) {
         var url = [registryUrl, viewsPath, keywordView].join('/') + '?' + qs.stringify({
             startkey: '["' + keyword + '"]',
@@ -79,7 +79,7 @@ var NpmApi = {
                 if (err) {
                     return ServerActions.moduleFetchFailed(err);
                 }
-                
+
                 ServerActions.modulesFetched(modules);
             });
         });

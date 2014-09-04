@@ -10,7 +10,8 @@ var ComponentStore = require('app/stores/components-store');
 function getStateFromStores() {
     return {
         recentlyCreated: ComponentStore.getMostRecentlyCreated(),
-        recentlyUpdated: ComponentStore.getMostRecentlyUpdated()
+        recentlyUpdated: ComponentStore.getMostRecentlyUpdated(),
+        mostStarred:     ComponentStore.getMostStarred()
     };
 }
 
@@ -49,9 +50,15 @@ var FrontPage = React.createClass({
                         listName="Recently updated"
                         className="modified-components"
                         components={this.state.recentlyUpdated}
-                    />                    
+                    />
+
+                    <ComponentList
+                        listName="Popular"
+                        className="popular-components"
+                        components={this.state.mostStarred}
+                    />
                 </section>
-                
+
                 <section className="faq">
                     <h2>How it works</h2>
                     <p>
@@ -71,7 +78,7 @@ var FrontPage = React.createClass({
 
                     <h2>Who made this? Can I contribute?</h2>
                     <p>
-                        Developed and currently hosted by <a href="http://vaffel.ninja/">VaffelNinja</a>, but it's an open-source, MIT-licensed solution. 
+                        Developed and currently hosted by <a href="http://vaffel.ninja/">VaffelNinja</a>, but it's an open-source, MIT-licensed solution.
                     </p>
                     <p>
                         Contributions are <a href="https://github.com/vaffel/react-components">very welcome</a>!

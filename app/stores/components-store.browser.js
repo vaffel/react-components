@@ -3,9 +3,10 @@
 var _ = require('lodash');
 var moment = require('moment');
 var Reflux = require('reflux');
+var sharedMethods = require('app/stores/component-store.shared');
 var ApiActions = require('app/actions/api');
 
-var ComponentStore = Reflux.createStore({
+var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
     init: function() {
         this.components = {};
         this.componentSummaries = [];
@@ -22,18 +23,6 @@ var ComponentStore = Reflux.createStore({
         ApiActions.fetchComponentInfo(name);
     },
 
-    getSummary: function(name) {
-        return _.find(this.componentSummaries, { name: name });
-    },
-
-    getAll: function() {
-        return this.components;
-    },
-
-    getSummaries: function() {
-        return this.componentSummaries;
-    },
-
     getMostRecentlyCreated: function(limit) {
         return (
             _.sortBy(this.componentSummaries, 'created')
@@ -46,7 +35,17 @@ var ComponentStore = Reflux.createStore({
         var mostRecent  = this.getMostRecentlyCreated();
         var lastUpdated = _.sortBy(this.componentSummaries, 'modified').reverse();
 
-        return _.without.apply(null, [lastUpdated].concat(mostRecent)).slice(0, limit || 10);
+        return _.without.apply(null,
+            [lastUpdated].concat(mostRecent)
+        ).slice(0, limit || 10);
+    },
+
+    getMostStarred: function(limit) {
+        return (
+            _.sortBy(this.componentSummaries, 'stars')
+            .reverse()
+            .slice(0, limit || 10)
+        );
     },
 
     populate: function(components) {
@@ -63,7 +62,7 @@ var ComponentStore = Reflux.createStore({
 
     addComponent: function(component) {
         component = this.parseComponent(component);
-        
+
         this.componentSummaries.push(component);
     },
 
@@ -71,6 +70,6 @@ var ComponentStore = Reflux.createStore({
         this.components[component.name] = component;
         this.trigger('change');
     }
-});
+}));
 
 module.exports = _.bindAll(ComponentStore);

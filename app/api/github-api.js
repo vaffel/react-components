@@ -21,7 +21,7 @@ var cache  = new LRU({
 client.authenticate(config.github);
 
 var GithubApi = {
-    
+
     getStarCountForModule: function(module, callback) {
         var moduleName = module.name,
             starCount  = cache.get(moduleName),
@@ -30,7 +30,7 @@ var GithubApi = {
         if (typeof starCount !== 'undefined') {
             return setImmediate(callback, null, starCount);
         } else if (!repo) {
-            return setImmediate(callback, new Error('Github repo could no be resolved for module'));
+            return setImmediate(callback, null, 0);
         }
 
         client.repos.get({

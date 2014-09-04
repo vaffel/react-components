@@ -2,11 +2,11 @@
 
 var _ = require('lodash');
 var moment = require('moment');
-var config = require('app/config');
 var Reflux = require('reflux');
+var sharedMethods = require('app/stores/component-store.shared');
 var ServerActions = require('app/actions/server');
 
-var ComponentStore = Reflux.createStore({
+var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
     init: function() {
         this.components = {};
         this.componentSummaries = [];
@@ -19,16 +19,8 @@ var ComponentStore = Reflux.createStore({
         return this.components[name];
     },
 
-    getSummary: function(name) {
-        return _.find(this.componentSummaries, { name: name });
-    },
-
-    getAll: function() {
-        return this.components;
-    },
-
-    getSummaries: function() {
-        return this.componentSummaries;
+    getLastUpdated: function() {
+        return this.lastUpdated;
     },
 
     getMostRecentlyCreated: function(limit) {
@@ -48,8 +40,12 @@ var ComponentStore = Reflux.createStore({
         ).slice(0, limit || 10);
     },
 
-    getLastUpdated: function() {
-        return this.lastUpdated;
+    getMostStarred: function(limit) {
+        return (
+            _.sortBy(this.componentSummaries, 'stars')
+            .reverse()
+            .slice(0, limit || 10)
+        );
     },
 
     populate: function(components) {
@@ -61,7 +57,7 @@ var ComponentStore = Reflux.createStore({
     parseAuthor: function(component) {
         var distTags = component['dist-tags'] || {},
             latest   = component.versions[distTags.latest] || {};
-        
+
         return (latest._npmUser || component.author).name;
     },
 
@@ -94,13 +90,9 @@ var ComponentStore = Reflux.createStore({
 
         var existing = _.find(this.componentSummaries, { name: component.name });
         _.pull(this.componentSummaries, existing);
-        
-        this.componentSummaries.push(this.parseComponentSummary(component));
-    },
 
-    isUncommonKeyword: function(keyword) {
-        return config['exclude-keywords'].indexOf(keyword) === -1;
+        this.componentSummaries.push(this.parseComponentSummary(component));
     }
-});
+}));
 
 module.exports = ComponentStore;
