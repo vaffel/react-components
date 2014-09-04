@@ -11,6 +11,8 @@ module.exports = {
         'html': 'htmlmixed',
         'javascript': 'javscript',
         'js': 'javascript',
+        'perl': 'perl',
+        'pl': 'perl',
         'php': 'php',
         'ruby': 'ruby',
         'rb': 'rb',
@@ -18,6 +20,7 @@ module.exports = {
         'sh': 'shell',
         'bash': 'shell',
         'batch': 'shell',
+        'xml': 'xml',
         'yaml': 'yaml'
     },
     'github': {
