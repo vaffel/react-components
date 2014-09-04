@@ -6,6 +6,7 @@ var config = require('app/config');
 var Footer = require('app/components/footer.jsx');
 var Container = require('app/components/container.jsx');
 var ReactLogo = require('app/components/react-logo.jsx');
+var HomeLink  = require('app/components/home-link.jsx');
 var SearchInput = require('app/components/search-input.jsx');
 
 module.exports = React.createClass({
@@ -17,8 +18,8 @@ module.exports = React.createClass({
             <div>
                 <header>
                     <Container>
-                        <ReactLogo />
-                        <h1><a href="/">{config['page-title']}</a></h1>
+                        <HomeLink><ReactLogo /></HomeLink>
+                        <h1><HomeLink>{config['page-title']}</HomeLink></h1>
 
                         <SearchInput query={this.props.query || ''} autoFocus={this.props.autoFocusSearch} />
                     </Container>
