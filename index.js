@@ -56,7 +56,7 @@ function startNpmModulesPolling() {
 
         // Do a request every once in a while
         setInterval(ServerActions.getModulesFromNpm, config['poll-interval']);
-        
+
         // Fetch straight away so we have something to deliver to clients
         ServerActions.getModulesFromNpm();
     });
@@ -128,11 +128,14 @@ server.route({
 server.route({
     method: 'GET',
     path: '/{param*}',
-    handler: {
-        directory: {
-            path: 'public',
-            lookupCompressed: true
-        }
+    config: {
+        handler: {
+            directory: {
+                path: 'public',
+                lookupCompressed: true
+            }
+        },
+        cache: { expiresIn: 3600 * 1000, privacy: 'public' }
     }
 });
 
