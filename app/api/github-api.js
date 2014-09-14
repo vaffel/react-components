@@ -54,11 +54,11 @@ var GithubApi = {
     populateModuleStarCount: function(module, callback) {
         GithubApi.getStarCountForModule(module, function(err, info) {
             if (err) {
-                return callback(err, module);
+                return console.error(err);
             }
 
-            module.starCount = info.starCount;
-            callback(err, module);
+            module.starCount = err ? 0 : info.starCount;
+            callback(undefined, module);
         });
     },
 
