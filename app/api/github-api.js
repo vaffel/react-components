@@ -54,7 +54,7 @@ var GithubApi = {
     populateModuleStarCount: function(module, callback) {
         GithubApi.getStarCountForModule(module, function(err, info) {
             if (err) {
-                return console.error(err);
+                console.error(err);
             }
 
             module.starCount = err ? 0 : info.starCount;
