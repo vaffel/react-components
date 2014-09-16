@@ -75,7 +75,7 @@ module.exports = React.createClass({
         }
         
         return (
-            <a href={githubUrl} className="pure-button">
+            <a href={githubUrl} className="pure-button" target="_blank">
                 <i className="fa fa-github" /> GitHub
             </a>
         );
