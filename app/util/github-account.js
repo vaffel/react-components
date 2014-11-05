@@ -11,7 +11,7 @@ module.exports = function(info) {
     var i = parts.length, matches;
     while (i--) {
         matches = parts[i].match(GithubRegex);
-        if (matches[1]) {
+        if (matches && matches[1]) {
             return matches[1];
         }
     }
