@@ -1,5 +1,6 @@
 'use strict';
 
+var production = process.env.NODE_ENV === 'production';
 var _ = require('lodash');
 var rimraf = require('gulp-rimraf');
 var sourcemaps = require('gulp-sourcemaps');
@@ -35,11 +36,17 @@ gulp.task('less', function() {
         lessc.end();
     });
 
-    return gulp.src('./public/less/components.less')
-        .pipe(sourcemaps.init())
-        .pipe(lessc)
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./public/css'));
+    if (production) {
+        return gulp.src('./public/less/components.less')
+            .pipe(lessc)
+            .pipe(gulp.dest('./public/css'));
+    } else {
+        return gulp.src('./public/less/components.less')
+            .pipe(sourcemaps.init())
+            .pipe(lessc)
+            .pipe(sourcemaps.write())
+            .pipe(gulp.dest('./public/css'));
+    }
 });
 
 gulp.task('clean-compressed', function() {
