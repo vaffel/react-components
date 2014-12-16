@@ -4,8 +4,7 @@ var config        = require('app/config'),
     request       = require('request'),
     JSONStream    = require('JSONStream'),
     eventStream   = require('event-stream'),
-    qs            = require('querystring'),
-    GithubApi     = require('app/api/github-api');
+    qs            = require('querystring');
 
 var registryUrl   = 'https://registry.npmjs.org',
     viewsPath     = '-/_view',

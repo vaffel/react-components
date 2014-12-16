@@ -10,7 +10,6 @@ var isBrowser = typeof window !== 'undefined';
 var RoutingActions = require('app/actions/routing');
 var ComponentStore = require('app/stores/components-store');
 var ComponentApi   = require('app/api/components-api');
-var ApiActions     = require('app/actions/api');
 var SearchIndex    = require('app/search/filter');
 
 // We'll want to use react-router when server-side rendering is ready
@@ -68,9 +67,6 @@ if (isBrowser) {
     // Allow React to leak into global namespace - enables devtools etc
     window.React = React;
 
-    // Fetch components from API
-    ApiActions.fetchComponents();
-
     // Wait for components list to be ready
     ComponentStore.listen(function() {
         // Render the app once the components list is ready
@@ -82,5 +78,13 @@ if (isBrowser) {
     });
 }
 
+// Prime component store
+ComponentStore.populateFromDatabase();
+
+// Have component store fetch new components every once in a while
+setInterval(
+    ComponentStore.populateFromDatabase.bind(ComponentStore),
+    isBrowser ? 1000 * 60 * 15 : 1000 * 60 * 5 // 15 minutes in browser, 5 on server
+);
 
 module.exports = App;

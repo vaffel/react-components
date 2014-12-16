@@ -1,32 +1,17 @@
 'use strict';
 
-var NpmApi   = require('app/api/npm-api');
-var sublevel = require('level-sublevel');
-var level    = require('level');
-var config   = require('app/config');
-
-var db = sublevel(level(config.leveldb.location, {
-    valueEncoding: 'json'
-}));
-
-var componentDb = db.sublevel('components');
+var NpmApi = require('app/api/npm-api');
+var db = require('app/database');
 
 NpmApi.getModules(function(err, modules) {
     if (err) {
-        return console.error(err);
+        console.error('Module fetching failed: ', err);
+        return;
     }
 
-    var ops = modules.map(function(mod) {
-        return {
-            type: 'put',
-            key: mod._id,
-            value: mod
-        };
+    modules.forEach(function(module) {
+        db.setModule(module);
     });
 
-    componentDb.batch(ops, function(err) {
-        if (err) {
-            console.error(err);
-        }
-    });
+    db.quit();
 });

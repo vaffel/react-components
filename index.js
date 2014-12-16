@@ -3,7 +3,6 @@
 require('node-jsx').install({ extension: '.jsx' });
 
 var _       = require('lodash');
-var config  = require('app/config');
 var Hapi    = require('hapi');
 var isDev   = process.env.NODE_ENV === 'development';
 var server  = new Hapi.Server(process.env.REACT_COMPONENTS_PORT || 3000);
@@ -34,16 +33,6 @@ var params = {
 var controllers = {
     components: require('app/controllers/components')
 };
-
-// Prime component store
-var ComponentStore = require('app/stores/components-store');
-ComponentStore.populateFromDatabase();
-
-// Have component store fetch new components every once in a while
-setInterval(
-    ComponentStore.populateFromDatabase.bind(ComponentStore),
-    config['poll-interval']
-);
 
 function getPageTitle(query) {
     if (!query) {
@@ -96,7 +85,7 @@ server.route({
     path: '/api/components',
     config: {
         handler: controllers.components.componentsList,
-        cache: { expiresIn: config['poll-interval'], privacy: 'public' }
+        cache: { expiresIn: 1000 * 60 * 5, privacy: 'public' }
     }
 });
 

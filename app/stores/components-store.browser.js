@@ -48,6 +48,10 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
         );
     },
 
+    populateFromDatabase: function() {
+        ApiActions.fetchComponents();
+    },
+
     populate: function(components) {
         components.map(this.addComponent);
         this.trigger('change');

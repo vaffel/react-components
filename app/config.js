@@ -1,7 +1,6 @@
 module.exports = {
     'page-title': 'React Components',
     'npm-keyword': 'react-component',
-    'poll-interval': 300000,
     'exclude-keywords': ['react', 'react-component'],
     'codemirror-modes': {
         'cs': 'coffeescript',
@@ -28,7 +27,7 @@ module.exports = {
         'key': process.env.GITHUB_KEY,
         'secret': process.env.GITHUB_SECRET
     },
-    'leveldb': {
-        'location': process.env.LEVELDB_LOCATION || __dirname + '/../data/components.db'
+    'redis': {
+        'databaseNumber': 1
     }
 };

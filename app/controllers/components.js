@@ -6,7 +6,7 @@ var ComponentsStore = require('app/stores/components-store');
 var dateFormat = 'ddd, DD MMM YYYY HH:mm:ss [GMT]'; // "Sun, 31 Aug 2014 12:32:57 GMT"
 
 module.exports = {
-  
+
     componentsList: function(request, reply) {
         var summaries = ComponentsStore.getSummaries();
         var response = {

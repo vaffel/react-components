@@ -1,24 +1,31 @@
 'use strict';
 
+var db = require('app/database');
+var async = require('async');
 var GithubApi = require('app/api/github-api');
-var sublevel  = require('level-sublevel');
-var level     = require('level');
-var config    = require('app/config');
 
-var db = sublevel(level(config.leveldb.location, {
-    valueEncoding: 'json'
-}));
+db.getModules(function(err, modules) {
+    if (err) {
+        console.error('Failed to fetch modules from DB: ', err);
+        db.quit();
+        return;
+    }
 
-var starsDb = db.sublevel('stars');
-var componentsDb = db.sublevel('components');
+    async.map(modules, getStarCountAndUpdate, function(err) {
+        db.quit();
 
-componentsDb.createReadStream()
-    .on('data', function(row) {
-        GithubApi.getStarCountForModule(row.value, function(err, starCount) {
-            if (err) {
-                return;
-            }
-            
-            starsDb.put(row.key, starCount);
-        });
+        if (err) {
+            console.error('Failed to update DB: ', err);
+        }
     });
+});
+
+function getStarCountAndUpdate(module, callback) {
+    GithubApi.getStarCountForModule(module, function(err, starCount) {
+        if (err) {
+            return callback();
+        }
+
+        db.setModuleStars(module._id, starCount, callback);
+    });
+}
