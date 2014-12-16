@@ -7,5 +7,5 @@ var ComponentInfo = require('app/pages/component-info.jsx');
 module.exports = {
     '/': Front,
     '/search/:query': Search,
-    '/component/:componentName': ComponentInfo 
+    '/component/:componentName': ComponentInfo
 };

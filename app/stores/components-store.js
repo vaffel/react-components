@@ -3,17 +3,14 @@
 var _ = require('lodash');
 var moment = require('moment');
 var Reflux = require('reflux');
+var db = require('app/database');
+
 var sharedMethods = require('app/stores/component-store.shared');
-var ServerActions = require('app/actions/server');
 
 var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
-    init: function() {
-        this.components = {};
-        this.componentSummaries = [];
-        this.lastUpdated = Date.now();
-
-        this.listenTo(ServerActions.modulesFetched, this.populate);
-    },
+    components: {},
+    componentSummaries: [],
+    lastUpdated: Date.now(),
 
     get: function(name) {
         return this.components[name];
@@ -48,10 +45,19 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
         );
     },
 
-    populate: function(components) {
-        this.lastUpdated = Date.now();
-        components.map(this.addComponent.bind(this));
-        this.trigger('change');
+    populateFromDatabase: function() {
+        var addComponent = this.addComponent.bind(this);
+
+        db.getModules(function(err, modules) {
+            if (err) {
+                return console.error('Failed to fetch modules from DB: ', err);
+            }
+
+            modules.forEach(addComponent);
+
+            this.trigger('change');
+            this.lastUpdated = Date.now();
+        }.bind(this));
     },
 
     parseAuthor: function(component) {

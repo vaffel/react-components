@@ -3,7 +3,6 @@
 require('node-jsx').install({ extension: '.jsx' });
 
 var _       = require('lodash');
-var config  = require('app/config');
 var Hapi    = require('hapi');
 var isDev   = process.env.NODE_ENV === 'development';
 var server  = new Hapi.Server(process.env.REACT_COMPONENTS_PORT || 3000);
@@ -31,36 +30,9 @@ var params = {
     }
 };
 
-var ServerActions = require('app/actions/server');
-var NpmApi = require('app/api/npm-api');
-var GithubApi = require('app/api/github-api');
-
 var controllers = {
     components: require('app/controllers/components')
 };
-
-var stores = {
-    components: require('app/stores/components-store')
-};
-
-function startNpmModulesPolling() {
-    // Prime the github API cache so we don't hammer the API
-    GithubApi.initStarCountCache(function(err) {
-        if (err) {
-            return console.error('Failed to init star count cache: ', err);
-        }
-
-        // Have the API modules listen for actions
-        NpmApi.listen();
-        GithubApi.listen();
-
-        // Do a request every once in a while
-        setInterval(ServerActions.getModulesFromNpm, config['poll-interval']);
-
-        // Fetch straight away so we have something to deliver to clients
-        ServerActions.getModulesFromNpm();
-    });
-}
 
 function getPageTitle(query) {
     if (!query) {
@@ -113,7 +85,7 @@ server.route({
     path: '/api/components',
     config: {
         handler: controllers.components.componentsList,
-        cache: { expiresIn: config['poll-interval'], privacy: 'public' }
+        cache: { expiresIn: 1000 * 60 * 5, privacy: 'public' }
     }
 });
 
@@ -141,6 +113,4 @@ server.route({
 
 server.start(function() {
     console.log('Server running at:', server.info.uri);
-
-    startNpmModulesPolling();
 });

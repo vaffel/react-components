@@ -4,6 +4,7 @@ var _ = require('lodash');
 var React = require('react');
 var marked = require('marked');
 var config = require('app/config');
+var escapeRegex = require('app/util/escape-regex');
 var getGithubAccount = require('app/util/github-account');
 var codeMirror = typeof window === 'undefined' ? function() {} : window.CodeMirror;
 
@@ -49,7 +50,7 @@ module.exports = React.createClass({
 
             file = file.indexOf('/') === 0 ? file : ('/' + file);
             html = html.replace(
-                new RegExp('<a href="' + matches[1] + '">', 'g'),
+                new RegExp('<a href="' + escapeRegex(matches[1]) + '">', 'g'),
                 '<a href="' + githubUrl + file + '">'
             );
         }

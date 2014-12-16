@@ -4,9 +4,7 @@ var config        = require('app/config'),
     request       = require('request'),
     JSONStream    = require('JSONStream'),
     eventStream   = require('event-stream'),
-    qs            = require('querystring'),
-    ServerActions = require('app/actions/server'),
-    GithubApi     = require('app/api/github-api');
+    qs            = require('querystring');
 
 var registryUrl   = 'https://registry.npmjs.org',
     viewsPath     = '-/_view',
@@ -45,8 +43,6 @@ var NpmApi = {
             .on('error', function(err) { console.error('Error fetching module info: ', err); })
             .pipe(eventStream.map(NpmApi.getModuleDownloadCount))
             .on('error', function(err) { console.error('Error fetching module download count: ', err); })
-            .pipe(eventStream.map(GithubApi.populateModuleStarCount))
-            .on('error', function(err) { console.error('Error fetching github star counts: ', err); })
             .pipe(eventStream.writeArray(onComplete));
     },
 
@@ -66,22 +62,6 @@ var NpmApi = {
 
         request({ url: url, json: true }, function(err, res, body) {
             callback(err, body);
-        });
-    },
-
-    listen: function() {
-        ServerActions.getModulesFromNpm.shouldEmit = function() {
-            return !isFetching;
-        };
-
-        ServerActions.getModulesFromNpm.listen(function() {
-            NpmApi.getModules(function(err, modules) {
-                if (err) {
-                    return ServerActions.moduleFetchFailed(err);
-                }
-
-                ServerActions.modulesFetched(modules);
-            });
         });
     }
 };
