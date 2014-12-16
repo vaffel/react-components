@@ -44,8 +44,8 @@ function setModule(module, callback) {
     var client = getDb();
 
     async.series([
-        async.apply(client.set, 'module:info:' + module._id, JSON.stringify(module)),
-        async.apply(client.sadd, 'module:list', module._id)
+        async.apply(client.set.bind(client), 'module:info:' + module._id, JSON.stringify(module)),
+        async.apply(client.sadd.bind(client), 'module:list', module._id)
     ], callback);
 }
 
