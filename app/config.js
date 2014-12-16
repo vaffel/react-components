@@ -28,7 +28,7 @@ module.exports = {
         'key': process.env.GITHUB_KEY,
         'secret': process.env.GITHUB_SECRET
     },
-    'cache': {
-        'starCounts': __dirname + '/../data/starCounts.json'
+    'leveldb': {
+        'location': process.env.LEVELDB_LOCATION || __dirname + '/../data/components.db'
     }
 };

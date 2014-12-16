@@ -3,17 +3,20 @@
 var _ = require('lodash');
 var moment = require('moment');
 var Reflux = require('reflux');
+var level  = require('level');
+var config = require('app/config');
+var sublevel = require('level-sublevel');
+var db = sublevel(level(config.leveldb.location, {
+    valueEncoding: 'json'
+}));
+
+var componentDb = db.sublevel('components');
 var sharedMethods = require('app/stores/component-store.shared');
-var ServerActions = require('app/actions/server');
 
 var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
-    init: function() {
-        this.components = {};
-        this.componentSummaries = [];
-        this.lastUpdated = Date.now();
-
-        this.listenTo(ServerActions.modulesFetched, this.populate);
-    },
+    components: {},
+    componentSummaries: [],
+    lastUpdated: Date.now(),
 
     get: function(name) {
         return this.components[name];
@@ -48,10 +51,15 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
         );
     },
 
-    populate: function(components) {
-        this.lastUpdated = Date.now();
-        components.map(this.addComponent.bind(this));
-        this.trigger('change');
+    populateFromDatabase: function() {
+        componentDb.createReadStream()
+            .on('data', function(row) {
+                this.addComponent(row.value);
+            }.bind(this))
+            .on('end', function() {
+                this.trigger('change');
+                this.lastUpdated = Date.now();
+            }.bind(this));
     },
 
     parseAuthor: function(component) {

@@ -31,36 +31,19 @@ var params = {
     }
 };
 
-var ServerActions = require('app/actions/server');
-var NpmApi = require('app/api/npm-api');
-var GithubApi = require('app/api/github-api');
-
 var controllers = {
     components: require('app/controllers/components')
 };
 
-var stores = {
-    components: require('app/stores/components-store')
-};
+// Prime component store
+var ComponentStore = require('app/stores/components-store');
+ComponentStore.populateFromDatabase();
 
-function startNpmModulesPolling() {
-    // Prime the github API cache so we don't hammer the API
-    GithubApi.initStarCountCache(function(err) {
-        if (err) {
-            return console.error('Failed to init star count cache: ', err);
-        }
-
-        // Have the API modules listen for actions
-        NpmApi.listen();
-        GithubApi.listen();
-
-        // Do a request every once in a while
-        setInterval(ServerActions.getModulesFromNpm, config['poll-interval']);
-
-        // Fetch straight away so we have something to deliver to clients
-        ServerActions.getModulesFromNpm();
-    });
-}
+// Have component store fetch new components every once in a while
+setInterval(
+    ComponentStore.populateFromDatabase.bind(ComponentStore),
+    config['poll-interval']
+);
 
 function getPageTitle(query) {
     if (!query) {
@@ -141,6 +124,4 @@ server.route({
 
 server.start(function() {
     console.log('Server running at:', server.info.uri);
-
-    startNpmModulesPolling();
 });
