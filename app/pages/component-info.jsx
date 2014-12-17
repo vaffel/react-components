@@ -73,7 +73,7 @@ module.exports = React.createClass({
         if (!githubUrl) {
             return null;
         }
-        
+
         return (
             <a href={githubUrl} className="pure-button">
                 <i className="fa fa-github" /> GitHub
@@ -110,7 +110,7 @@ module.exports = React.createClass({
         return (
             <Layout className="component-info" query={this.props.route.componentName} autoFocusSearch={false}>
                 {
-                    this.state.componentInfo ? 
+                    this.state.componentInfo ?
                     <div>
                         <aside>
                         <div className="toolbar">
