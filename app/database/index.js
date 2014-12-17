@@ -63,10 +63,14 @@ function getModules(callback) {
 function setModule(module, callback) {
     var client = getDb();
 
-    async.series([
-        async.apply(client.set.bind(client), 'module:info:' + module._id, JSON.stringify(module)),
-        async.apply(client.sadd.bind(client), 'module:list', module._id)
-    ], callback);
+    var error, done = _.after(2, callback);
+    var setComplete = function(err) {
+        error = error || err;
+        done(error);
+    };
+
+    client.set('module:info:' + module._id, JSON.stringify(module), setComplete);
+    client.sadd('module:list', module._id, setComplete);
 }
 
 function getModuleStars(name, callback) {
