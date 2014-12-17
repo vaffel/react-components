@@ -46,18 +46,18 @@
     "redis": "^0.12.1",
     "reflux": "^0.1.7",
     "request": "^2.40.0",
-    "xhr": "^1.15.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.8.7",
-    "gulp-less": "^1.3.5",
-    "gulp-livereload": "^2.1.1",
-    "gulp-rimraf": "^0.1.0",
-    "gulp-sourcemaps": "^1.1.1",
-    "gulp-util": "^3.0.0",
-    "gulp-webpack": "^0.3.0",
+    "xhr": "^1.15.0",
     "gulp-zopfli": "^0.1.1",
     "webpack": "^1.3.3-beta2",
+    "gulp": "^3.8.7",
+    "gulp-rimraf": "^0.1.0",
+    "gulp-less": "^1.3.5",
+    "gulp-util": "^3.0.0",
+    "gulp-webpack": "^0.3.0"
+  },
+  "devDependencies": {
+    "gulp-sourcemaps": "^1.1.1",
+    "gulp-livereload": "^2.1.1",
     "webpack-dev-server": "^1.4.10"
   }
 }

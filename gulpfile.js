@@ -3,8 +3,6 @@
 var production = process.env.NODE_ENV === 'production';
 var _ = require('lodash');
 var rimraf = require('gulp-rimraf');
-var sourcemaps = require('gulp-sourcemaps');
-var livereload = require('gulp-livereload');
 var webpackConfig = require('./webpack.config');
 var webpack = require('webpack');
 var zopfli = require('gulp-zopfli');
@@ -12,6 +10,11 @@ var gutil = require('gulp-util');
 var less = require('gulp-less');
 var path = require('path');
 var gulp = require('gulp');
+
+if (!production) {
+    var livereload = require('gulp-livereload');
+    var sourcemaps = require('gulp-sourcemaps');
+}
 
 gulp.task('default', ['less', 'webpack:build', 'clean-compressed']);
 gulp.task('watch', ['serve', 'webpack:build-dev'], function() {
