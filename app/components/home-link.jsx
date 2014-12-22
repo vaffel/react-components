@@ -10,7 +10,7 @@ module.exports = React.createClass({
 
     goHome: function(e) {
         // If trying to open a new window, fall back
-        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.button === 2) {
+        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.button === 2 || e.button === 1) {
             return;
         }
 
