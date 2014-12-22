@@ -2,9 +2,20 @@
 
 require('node-jsx').install({ extension: '.jsx' });
 
+var isDev    = process.env.NODE_ENV === 'development';
+var winston  = require('winston');
+var Pushover = require('winston-pushover').Pushover;
+
+if (!isDev) {
+    winston.add(Pushover, {
+        userKey: process.env.PUSHOVER_USER_KEY,
+        token: process.env.PUSHOVER_TOKEN,
+        handlExceptions: true
+    });
+}
+
 var _       = require('lodash');
 var Hapi    = require('hapi');
-var isDev   = process.env.NODE_ENV === 'development';
 var server  = new Hapi.Server(process.env.REACT_COMPONENTS_PORT || 3000);
 var render  = require('app/react/renderer');
 var pkgInfo = require('./package.json');
