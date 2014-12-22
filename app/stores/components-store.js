@@ -4,6 +4,7 @@ var _ = require('lodash');
 var moment = require('moment');
 var Reflux = require('reflux');
 var db = require('app/database');
+var winston = require('winston');
 
 var sharedMethods = require('app/stores/component-store.shared');
 
@@ -85,8 +86,18 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
             versions = component.versions || {},
             latest   = versions[distTags.latest] || {};
 
-        component.created  = component.time.created;
-        component.modified = component.time.modified;
+        if (!component.time) {
+            component.created  = '1980-01-01T00:00:00.000Z';
+            component.modified = '1980-01-01T00:00:00.000Z';
+
+            winston.warning(
+                'Component with name "' + component.name + '" has no time settings'
+            );
+        } else {
+            component.created  = component.time.created;
+            component.modified = component.time.modified;
+        }
+
         component.branch   = latest.gitHead || 'master';
 
         return component;
