@@ -107,10 +107,6 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
     },
 
     addComponent: function(component) {
-        if (!component) {
-            return;
-        }
-
         this.components[component.name] = this.parseComponent(component);
 
         var existing = _.find(this.componentSummaries, { name: component.name });

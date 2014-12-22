@@ -6,6 +6,10 @@ var config        = require('app/config'),
     eventStream   = require('event-stream'),
     qs            = require('querystring');
 
+function getError(err, res) {
+    return err || (res.statusCode !== 200 ? 'HTTP ' + res.statusCode : null);
+}
+
 var registryUrl   = 'https://registry.npmjs.org',
     viewsPath     = '-/_view',
     keywordView   = 'byKeyword',
@@ -52,7 +56,7 @@ var NpmApi = {
 
         request({ url: url, json: true }, function(err, res, response) {
             module.downloads = (response || {}).downloads;
-            callback(err, module);
+            callback(getError(err, res), module);
         });
     },
 
@@ -61,6 +65,11 @@ var NpmApi = {
             url = [registryUrl, moduleName].join('/');
 
         request({ url: url, json: true }, function(err, res, body) {
+            err = getError(err, res);
+            if (typeof body !== 'object') {
+                err = 'Body was not an object';
+            }
+            
             callback(err, body);
         });
     }
