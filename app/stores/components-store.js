@@ -90,7 +90,7 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
             component.created  = '1980-01-01T00:00:00.000Z';
             component.modified = '1980-01-01T00:00:00.000Z';
 
-            winston.warning(
+            winston.warn(
                 'Component with name "' + component.name + '" has no time settings'
             );
         } else {
