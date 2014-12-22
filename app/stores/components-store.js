@@ -50,8 +50,11 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
         var addComponent = this.addComponent.bind(this);
 
         db.getModules(function(err, modules) {
-            if (err) {
-                return console.error('Failed to fetch modules from DB: ', err);
+            if (err || !modules || !modules.length) {
+                return winston.error(
+                    'Failed to fetch modules from DB: ' + 
+                    (err || 'No modules returned') 
+                );
             }
 
             modules.forEach(addComponent);
