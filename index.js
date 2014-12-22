@@ -7,11 +7,14 @@ var winston  = require('winston');
 var Pushover = require('winston-pushover').Pushover;
 
 if (!isDev) {
-    winston.add(Pushover, {
+    var pushOpts = {
         userKey: process.env.PUSHOVER_USER_KEY,
         token: process.env.PUSHOVER_TOKEN,
-        handlExceptions: true
-    });
+        handleExceptions: true
+    };
+
+    winston.add(Pushover, pushOpts);
+    winston.handleExceptions(new Pushover(pushOpts));
 }
 
 var _       = require('lodash');
