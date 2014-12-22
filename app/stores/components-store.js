@@ -82,7 +82,8 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
 
     parseComponent: function(component) {
         var distTags = component['dist-tags'] || {},
-            latest   = component.versions[distTags.latest] || {};
+            versions = component.versions || {},
+            latest   = versions[distTags.latest] || {};
 
         component.created  = component.time.created;
         component.modified = component.time.modified;
