@@ -5,6 +5,7 @@
   "description": "Searchable repository of React-components",
   "main": "index.js",
   "scripts": {
+    "postinstall": "echo Fetching database. Please wait. && node cron/fetch-components.js && echo Database downloaded.", 
     "test": "node test/*.test.js"
   },
   "repository": {
