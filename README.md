@@ -12,17 +12,34 @@ In order to build this project you need to have [node](https://nodejs.org/) and 
 git clone git@github.com:vaffel/react-components.git
 cd react-components
 npm install
+npm run fetch:database
+```
+
+To run the project in development mode, use:
+
+```
+gulp watch
 ```
 
 ### Importing modules
 
-This project relies on a database of npm components. The first time the project is installed, npm install will fetch the components for you. If you wish to update your database, run the script:
+This project relies on a database of npm components. Before being able to run the project for the first time, you need to fetch the components. The command to do so can also be used any time you wish to update your database.
 
 ```
-node cron/fetch-components.js
+npm run fetch:database
 ```
 
 ### Possible sources of Installation problems For mac
+
+#### Problems during npm install
+
+The current version of the project is not yet fully compatible with node v4.0.0. One possible work around is to use Node Version Manager ([NVM](https://github.com/creationix/nvm)), and install node v0.12.7. This can be accomplished as follows:
+
+```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.28.0/install.sh | bash 
+nvm install v0
+nvm use v0
+```
 
 #### [Problems during hiredis Installation](https://github.com/redis/hiredis-node/issues/102)
 
