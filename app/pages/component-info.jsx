@@ -112,6 +112,10 @@ module.exports = React.createClass({
                 {
                     this.state.componentInfo ?
                     <div>
+                        <h1>
+                            <a href={this.state.componentInfo.homepage}>{this.state.componentInfo._id}</a>  by {this.state.componentInfo.author.name}
+                        </h1>
+                        <hr />
                         <aside>
                         <div className="toolbar">
                             {this.getGithubButton()}

@@ -601,6 +601,18 @@ input.search {
     font-size: 1em;
   }
 }
+.component-header{
+  text-align: center;
+  background-color: #2d2d2d;
+  color: #61dafb;
+  font-size: 2em;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+.toolbar,
+.readme{
+  margin-top: 40px;
+}
 .readme {
   line-height: 1.4em;
 }
