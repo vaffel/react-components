@@ -112,9 +112,10 @@ module.exports = React.createClass({
                 {
                     this.state.componentInfo ?
                     <div>
-                        <h1>
-                            <a href={this.state.componentInfo.homepage}>{this.state.componentInfo._id}</a>  by {this.state.componentInfo.author.name}
-                        </h1>
+                        <div className="component-header">
+                            <a className="component-title" href={this.state.componentInfo.homepage}>{this.state.componentInfo._id}</a>
+                            <div className="component-subtitle">by <strong>{this.state.componentInfo.author.name}</strong></div>
+                        </div>
                         <hr />
                         <aside>
                         <div className="toolbar">

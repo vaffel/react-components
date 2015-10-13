@@ -603,11 +603,16 @@ input.search {
 }
 .component-header{
   text-align: center;
-  background-color: #2d2d2d;
-  color: #61dafb;
-  font-size: 2em;
   padding: 20px;
   margin-bottom: 10px;
+}
+a.component-title{
+  text-transform: capitalize;
+  font-size: 2em;
+  font-weight: bold;
+}
+.component-subtitle{
+  font-size: 1.5em;
 }
 .toolbar,
 .readme{
