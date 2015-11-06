@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 'use strict';
 
+var _      = require('lodash');
 var React  = require('react');
 var config = require('app/config');
 var router = require('app/router');
@@ -32,6 +33,8 @@ module.exports = React.createClass({
         // Use to bring up the "looking glass"-icon
         this.getDOMNode().setAttribute('results', 5);
 
+        this.changeQueryDebounced = _.debounce(this.changeQuery, 250);
+
         // Focus the END of the input (if it has a value and autofocus is set to true)
         if (this.props.query && this.props.autoFocus) {
             this.moveCaretToEnd();
@@ -55,7 +58,11 @@ module.exports = React.createClass({
     },
 
     onQueryChange: function(e) {
-        var state = { query: e.target.value.replace(/^\s+$/g, '') },
+        this.changeQueryDebounced(e.target.value.replace(/^\s+$/g, ''));
+    },
+
+    changeQuery: function(query) {
+        var state = { query: query },
             url   = state.query ? '/search/' + encodeURIComponent(state.query) : '/',
             title = this.getPageTitle(state.query);
 
@@ -79,7 +86,6 @@ module.exports = React.createClass({
                 className="search"
                 onChange={this.onQueryChange}
                 defaultValue={this.props.query}
-                value={this.state.query}
                 placeholder={this.props.placeholder}
                 autoFocus={this.props.autoFocus}
             />
