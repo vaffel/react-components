@@ -42,7 +42,7 @@
     "gulp-webpack": "^0.3.0",
     "gulp-zopfli": "^0.1.1",
     "hapi": "^6.5.1",
-    "hiredis": "^0.1.17",
+    "hiredis": "^0.4.1",
     "jsx-loader": "^0.11.0",
     "lodash": "^2.4.1",
     "lru-cache": "^2.5.0",
