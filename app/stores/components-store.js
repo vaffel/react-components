@@ -52,8 +52,8 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
         db.getModules(function(err, modules) {
             if (err || !modules || !modules.length) {
                 return winston.error(
-                    'Failed to fetch modules from DB: ' + 
-                    (err || 'No modules returned') 
+                    'Failed to fetch modules from DB: ' +
+                    (err || 'No modules returned')
                 );
             }
 
@@ -78,7 +78,7 @@ var ComponentStore = Reflux.createStore(_.merge({}, sharedMethods, {
             author: this.parseAuthor(component),
             modified: moment.utc(component.time.modified),
             created: moment.utc(component.time.created),
-            keywords: component.keywords.filter(this.isUncommonKeyword),
+            keywords: (component.keywords || []).filter(this.isUncommonKeyword),
             downloads: component.downloads || 0,
             stars: component.starCount
         };
