@@ -5,7 +5,7 @@ var _ = require('lodash');
 var rimraf = require('gulp-rimraf');
 var webpackConfig = require('./webpack.config');
 var webpack = require('webpack');
-var zopfli = require('gulp-zopfli');
+var gzip = require('gulp-gzip');
 var gutil = require('gulp-util');
 var less = require('gulp-less');
 var path = require('path');
@@ -58,19 +58,19 @@ gulp.task('clean-compressed', function() {
 
 gulp.task('compress-css', function() {
     return gulp.src('./public/css/*.css')
-        .pipe(zopfli({ zopfliOptions: { numiterations: 1000 } }))
+        .pipe(gzip())
         .pipe(gulp.dest('./public/css'));
 });
 
 gulp.task('compress-dist', function() {
     return gulp.src('./public/dist/bundle.js')
-        .pipe(zopfli({ zopfliOptions: { numiterations: 1000 } }))
+        .pipe(gzip())
         .pipe(gulp.dest('./public/dist'));
 });
 
 gulp.task('compress-js', function() {
     return gulp.src('./public/js/*.js')
-        .pipe(zopfli({ zopfliOptions: { numiterations: 1000 } }))
+        .pipe(gzip())
         .pipe(gulp.dest('./public/js'));
 });
 
